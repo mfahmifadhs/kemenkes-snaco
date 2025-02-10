@@ -19,7 +19,7 @@ class AuthController extends Controller
         return view('login');
     }
 
-    public function post(Request $request, $id)
+    public function post(Request $request)
     {
         dd('login');
         if (Crypt::decrypt($id) == 'masuk.post') {
