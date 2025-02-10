@@ -36,12 +36,13 @@
         <div class="card" style="border-radius: 20px;">
             <div class="card-header text-center mt-4">
                 <a href="{{ url('/') }}" class="my-5">
+                    <img src="{{ asset('dist/img/logo-kemenkes.png') }}" class="img-fluid w-50" alt="">
                     <img src="{{ asset('dist/img/snacoms.png') }}" class="img-fluid w-75" alt="">
                     <h1 class="text-primay font-weight-bold">
                     </h1>
                 </a>
             </div>
-            <div class="card-body">
+            <div class="card-body my-4">
                 <form action="{{ route('post.login', Crypt::encrypt('masuk.post')) }}" method="POST">
                     @csrf
                     <div class="input-group mb-3">
@@ -71,12 +72,12 @@
                     <a href="#">Lupa password ?</a>
                 </p>
                 <p class="mb-0">
-                    <a href="https://wa.me/6285772652563" class="text-center">Bantuan</a>
+                    <a href="#" class="text-center">Bantuan</a>
                 </p>
             </div>
-            <div class="card-footer text-center">
+            <!-- <div class="card-footer text-center">
                 <img src="{{ asset('dist/img/biro-umum.png') }}" class="img-fluid" width="150">
-            </div>
+            </div> -->
         </div>
         <!-- /.card -->
     </div>
