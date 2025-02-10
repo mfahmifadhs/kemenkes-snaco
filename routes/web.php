@@ -139,6 +139,7 @@ Route::group(['middleware' => 'auth'], function () {
     // User
     Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
         Route::get('daftar', [UserController::class, 'show'])->name('show');
+        Route::get('profil/{id}', [UserController::class, 'profil'])->name('profil');
         Route::get('tambah', [UserController::class, 'create'])->name('create');
         Route::get('detail/{id}', [UserController::class, 'detail'])->name('detail');
         Route::get('hapus/{id}', [UserController::class, 'delete'])->name('delete');

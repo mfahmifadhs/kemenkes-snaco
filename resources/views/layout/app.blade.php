@@ -79,7 +79,7 @@
                             </p>
                         </span>
                         <div class="dropdown-divider"></div>
-                        <a href="{{ url('unit-kerja/profil/user/'. Auth::user()->id) }}" class="dropdown-item">
+                        <a href="{{ route('user.profil', Auth::user()->id) }}" class="dropdown-item">
                             <i class="fas fa-user mr-2"></i> Profil
                         </a>
                         <div class="dropdown-divider"></div>

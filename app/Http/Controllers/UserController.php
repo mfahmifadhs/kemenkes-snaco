@@ -20,6 +20,12 @@ class UserController extends Controller
         return view('pages.user.show', compact('user'));
     }
 
+    public function profil($id)
+    {
+        $user = User::where('id', $id)->first();
+        return view('pages.user.profil', compact('user'));
+    }
+
     public function detail($id)
     {
         $user = User::where('id', $id)->first();
