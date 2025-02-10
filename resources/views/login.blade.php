@@ -42,7 +42,7 @@
                 </a>
             </div>
             <div class="card-body">
-                <form action="{{ route('post.login') }}" method="POST">
+                <form action="{{ route('post.login', Crypt::encrypt('masuk.post')) }}" method="POST">
                     @csrf
                     <div class="input-group mb-3">
                         <div class="input-group-append">

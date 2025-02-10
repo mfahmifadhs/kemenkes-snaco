@@ -19,9 +19,8 @@ class AuthController extends Controller
         return view('login');
     }
 
-    public function post(Request $request)
+    public function post(Request $request, $id)
     {
-        dd('login');
         if (Crypt::decrypt($id) == 'masuk.post') {
             $request->validate([
                 'username'  => 'required',
