@@ -37,28 +37,26 @@
             </div>
             <div class="card-body">
                 <div class="input-group form-group">
+                    <h6 class="w-25 font-weight-bold form-group">NIP</h6>
+                    <h6 class="w-75 form-group">: {{ $user->pegawai->nip }}</h6>
 
+                    <h6 class="w-25 font-weight-bold form-group">Nama Pegawai</h6>
+                    <h6 class="w-75 form-group">: {{ $user->pegawai->nama_pegawai }}</h6>
 
-                    <h6 class="w-25 font-weight-bold">NIP</h6>
-                    <h6 class="w-75">: {{ $user->pegawai->nip }}</h6>
+                    <h6 class="w-25 font-weight-bold form-group">Jabatan</h6>
+                    <h6 class="w-75 form-group">: {{ $user->pegawai->jabatan->jabatan }}</h6>
 
-                    <h6 class="w-25 font-weight-bold">Nama Pegawai</h6>
-                    <h6 class="w-75">: {{ $user->pegawai->nama_pegawai }}</h6>
+                    <h6 class="w-25 font-weight-bold form-group">Tim Kerja</h6>
+                    <h6 class="w-75 form-group">: {{ $user->pegawai->timker?->tim_kerja }}</h6>
 
-                    <h6 class="w-25 font-weight-bold">Jabatan</h6>
-                    <h6 class="w-75">: {{ $user->pegawai->jabatan->jabatan }}</h6>
+                    <h6 class="w-25 font-weight-bold form-group">Unit Kerja</h6>
+                    <h6 class="w-75 form-group">: {{ $user->pegawai->uker->unit_kerja }}</h6>
 
-                    <h6 class="w-25 font-weight-bold">Tim Kerja</h6>
-                    <h6 class="w-75">: {{ $user->pegawai->timker?->tim_kerja }}</h6>
+                    <h6 class="w-25 font-weight-bold form-group">Unit Utama</h6>
+                    <h6 class="w-75 form-group">: {{ $user->pegawai->uker->utama->unit_utama }}</h6>
 
-                    <h6 class="w-25 font-weight-bold">Unit Kerja</h6>
-                    <h6 class="w-75">: {{ $user->pegawai->uker->unit_kerja }}</h6>
-
-                    <h6 class="w-25 font-weight-bold">Unit Utama</h6>
-                    <h6 class="w-75">: {{ $user->pegawai->uker->utama->unit_utama }}</h6>
-
-                    <h6 class="w-25 font-weight-bold">Status</h6>
-                    <h6 class="w-75">: {{ $user->pegawai->status == 1 ? 'Aktif' : 'Tidak Aktif' }}</h6>
+                    <h6 class="w-25 font-weight-bold form-group">Email</h6>
+                    <h6 class="w-75 form-group">: {{ $user->email }}</h6>
                 </div>
             </div>
         </div>

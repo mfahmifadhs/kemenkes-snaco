@@ -23,7 +23,13 @@ class UserController extends Controller
     public function profil($id)
     {
         $user = User::where('id', $id)->first();
-        return view('pages.user.profil', compact('user'));
+        return view('pages.user.profil.show', compact('user'));
+    }
+
+    public function profilEdit($id)
+    {
+        $user = User::where('id', $id)->first();
+        return view('pages.user.profil.edit', compact('id','user'));
     }
 
     public function detail($id)
