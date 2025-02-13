@@ -89,7 +89,7 @@ class SnackcornerController extends Controller
         $barang   = $request->barang;
         $status   = $request->status;
 
-        $data    = Snackcorner::orderBy('snc_nama', 'asc')->orderBy('snc_status', 'desc');
+        $data    = Snackcorner::orderBy('id_snc', 'asc')->orderBy('snc_status', 'desc');
         $no       = 1;
         $response = [];
 
