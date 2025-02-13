@@ -189,7 +189,7 @@
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title">Modal title</h5>
+                                                    <h5 class="modal-title">Edit</h5>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
@@ -236,7 +236,7 @@
                                     </div>
                                 </td>
                                 <td class="text-left">{{ $row->snc->kategori->nama_kategori }}</td>
-                                <td class="text-left">{{ $row->snc->snc_deskripsi }}</td>
+                                <td class="text-left">{{ $row->snc->snc_nama }}</td>
                                 <td>{{ $row->jumlah_permintaan }}</td>
                                 <td>{{ $row->snc->satuan->satuan }}</td>
                             </tr>
@@ -255,7 +255,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content text-sm">
             <div class="modal-header">
-                <h5 class="modal-title">Modal title</h5>
+                <h5 class="modal-title">Tambah</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
