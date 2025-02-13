@@ -46,7 +46,7 @@ class SnackcornerController extends Controller
 
     public function show(Request $request)
     {
-        $data     = Snackcorner::get();
+        $data     = Snackcorner::orderBy('id_snc', 'asc')->get();
         $kategori = $request->get('kategori');
         $barang   = $request->get('barang');
         $status   = $request->get('status');
