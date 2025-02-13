@@ -55,7 +55,7 @@ class SnackcornerImport implements ToModel, WithStartRow
             $tambah->snc_deskripsi  = $row[4];
             $tambah->snc_satuan     = $satuan;
             $tambah->snc_maksimal   = $row[5];
-            $tambah->snc_harga      = $row[6];
+            $tambah->snc_harga      = $harga;
             $tambah->snc_keterangan = null;
             $tambah->snc_foto       = $row[2];
             $tambah->snc_status     = $status;
