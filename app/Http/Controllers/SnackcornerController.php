@@ -265,7 +265,8 @@ class SnackcornerController extends Controller
         if ($snc) {
             $total = $snc->jumlah_permintaan + $request->jumlah;
             UsulanSnc::where('id_usulan_snc', $snc->id_usulan_snc)->update([
-                'jumlah_permintaan' => $total
+                'jumlah_permintaan' => $total,
+                'status'            => $snc->usulan->status_persetujuan == 'true' ? 'true' : 'false'
             ]);
         } else {
             $id_usulan_snc = UsulanSnc::withTrashed()->count() + 1;
@@ -274,7 +275,7 @@ class SnackcornerController extends Controller
             $tambah->usulan_id          = $request->usulan_id;
             $tambah->snc_id             = $request->id_snc;
             $tambah->jumlah_permintaan  = $request->jumlah;
-            $tambah->status             = $snc->status_persetujuan == 'true' ? 'true' : 'false';
+            $tambah->status             = $snc->usulan->status_persetujuan == 'true' ? 'true' : 'false';
             $tambah->created_at         = Carbon::now();
             $tambah->save();
         }
@@ -285,18 +286,17 @@ class SnackcornerController extends Controller
     public function updateItem(Request $request)
     {
         $snc = UsulanSnc::where('snc_id', $request->id_snc)->where('usulan_id', $request->usulan_id)->first();
-
         if ($snc) {
             $total = $snc->jumlah_permintaan + $request->jumlah;
             UsulanSnc::where('id_usulan_snc', $snc->id_usulan_snc)->update([
                 'jumlah_permintaan' => $request->jumlah,
-                'status'            => $snc->status_persetujuan == 'true' ? 'true' : 'false'
+                'status'            => $snc->usulan->status_persetujuan == 'true' ? 'true' : 'false'
             ]);
         } else {
             UsulanSnc::where('id_usulan_snc', $request->id_usulan_snc)->update([
                 'snc_id'            => $request->id_snc,
                 'jumlah_permintaan' => $request->jumlah,
-                'status'            => $snc->status_persetujuan == 'true' ? 'true' : 'false'
+                'status'            => $snc->usulan->status_persetujuan == 'true' ? 'true' : 'false'
             ]);
         }
 
