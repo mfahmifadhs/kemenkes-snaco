@@ -180,6 +180,7 @@ class UsulanController extends Controller
                 'tanggal_ambil'      => $request->tanggal_ambil ?? null,
                 'otp_2'              => $request->persetujuan == 'true' ? rand(111111, 999999) : null,
                 'otp_3'              => $otp3,
+                'created_at'         => $request->tanggal_ambil ?? Carbon::now()
             ]);
             return redirect()->route('snaco.detail', $id)->with('success', 'Berhasil Melakukan Verifikasi');
         }
