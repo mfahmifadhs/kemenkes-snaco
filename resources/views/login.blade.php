@@ -68,12 +68,9 @@
                     </div>
                 </form>
 
-                <p class="mb-1">
-                    <a href="#">Lupa password ?</a>
-                </p>
-                <p class="mb-0">
+                <!-- <p class="mb-0">
                     <a href="#" class="text-center">Bantuan</a>
-                </p>
+                </p> -->
             </div>
             <!-- <div class="card-footer text-center">
                 <img src="{{ asset('dist/img/biro-umum.png') }}" class="img-fluid" width="150">
