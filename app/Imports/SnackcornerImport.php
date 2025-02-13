@@ -48,21 +48,20 @@ class SnackcornerImport implements ToModel, WithStartRow
                     'snc_status'     => $status
                 ]);
             } else {
-                dd($row[3]);
-                // $id_snc = Snackcorner::withTrashed()->count() + 1;
-                // $tambah = new Snackcorner();
-                // $tambah->id_snc         = $id_snc;
-                // $tambah->snc_kategori   = $kategori->id_kategori;
-                // $tambah->snc_nama       = $row[3];
-                // $tambah->snc_deskripsi  = $row[4];
-                // $tambah->snc_satuan     = $satuan;
-                // $tambah->snc_maksimal   = $row[5];
-                // $tambah->snc_harga      = $harga;
-                // $tambah->snc_keterangan = null;
-                // $tambah->snc_foto       = $row[1];
-                // $tambah->snc_status     = $status;
-                // $tambah->created_at     = Carbon::now();
-                // $tambah->save();
+                $id_snc = Snackcorner::withTrashed()->count() + 1;
+                $tambah = new Snackcorner();
+                $tambah->id_snc         = $id_snc;
+                $tambah->snc_kategori   = $kategori->id_kategori;
+                $tambah->snc_nama       = $row[3];
+                $tambah->snc_deskripsi  = $row[4];
+                $tambah->snc_satuan     = $satuan;
+                $tambah->snc_maksimal   = $row[5];
+                $tambah->snc_harga      = $harga;
+                $tambah->snc_keterangan = null;
+                $tambah->snc_foto       = $row[1];
+                $tambah->snc_status     = $status;
+                $tambah->created_at     = Carbon::now();
+                $tambah->save();
             }
         }
     }
