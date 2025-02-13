@@ -253,9 +253,9 @@
 
 <!-- Modal -->
 @php
-$route = Auth::user()->role_id == 1 ? route('snaco.stok.create') : route('usulan.store');
-$method = Auth::user()->role_id == 1 ? 'GET' : 'POST';
-$usul = Auth::user()->role_id == 1 ? 'Stok Barang Masuk' : 'Permintaan Snack Corner';
+$route = Auth::user()->role_id == 1 || Auth::user()->role_id == 2 ? route('snaco.stok.create') : route('usulan.store');
+$method = Auth::user()->role_id == 1 || Auth::user()->role_id == 2 ? 'GET' : 'POST';
+$usul = Auth::user()->role_id == 1 ? || Auth::user()->role_id == 2 'Stok Barang Masuk' : 'Permintaan Snack Corner';
 @endphp
 <form id="form" action="{{ $route }}" method="{{ $method }}">
     @csrf
