@@ -26,25 +26,24 @@
                     Permintaan Snack Corner
                 </label>
                 <div class="card-tools">
-
-                    @if (!$data->status_persetujuan)
-                    <a href="{{ route('usulan.edit', $data->id_usulan) }}" class="btn btn-warning border-dark btn-xs mt-2">
+                    @if ((!$data->status_persetujuan) || ($data->status_persetujuan && in_array(Auth::user()->id, [1, 2])))
+                    <a href="{{ route('usulan.edit', $data->id_usulan) }}" class="btn btn-warning border-dark btn-xs mt-0 p-1">
                         <i class="fas fa-edit"></i> Edit
                     </a>
 
-                    <a href="#" class="btn btn-danger border-dark btn-xs mt-2" onclick="confirm(event, `{{ route('usulan.delete', $data->id_usulan) }}`)">
+                    <a href="#" class="btn btn-danger border-dark btn-xs mt-0 p-1" onclick="confirm(event, `{{ route('usulan.delete', $data->id_usulan) }}`)">
                         <i class="fas fa-trash-alt"></i> Hapus
                     </a>
                     @endif
 
                     @if ($data->status_persetujuan == 'true')
-                    <span class="badge badge-success mt-2 p-2">
+                    <span class="badge badge-success mt-2 p-2 border border-dark">
                         <i class="fas fa-check-circle"></i> Permintaan Diterima
                     </span>
                     @endif
 
                     @if ($data->status_persetujuan == 'false')
-                    <span class="badge badge-danger mt-2 p-2">
+                    <span class="badge badge-danger mt-2 p-2 border border-dark">
                         <i class="fas fa-times-circle"></i> Permintaan Ditolak
                     </span>
                     @endif
