@@ -68,12 +68,13 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Aksi</th>
-                                        <th style="width: 12%;">Tanggal</th>
-                                        <th style="width: 5%;">Kode</th>
-                                        <th style="width: 13%;">Unit Kerja</th>
-                                        <th style="width: 15%;">No. Surat</th>
+                                        <th style="width: 13%;">Tanggal</th>
+                                        <th>Kode</th>
+                                        <th>Unit Kerja</th>
+                                        <th style="width: 13%;">No. Surat</th>
+                                        <th style="width: 13%;">Total Barang</th>
                                         <th>Hal</th>
-                                        <th>Detail</th>
+                                        <th class="d-none">Detail</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
@@ -257,10 +258,11 @@
                                     <td class="align-middle">${item.aksi}</td>
                                     <td class="align-middle">${item.tanggal}</td>
                                     <td class="align-middle">${item.kode}</td>
-                                    <td class="align-middle">${item.uker}</td>
+                                    <td class="align-middle text-left">${item.uker}</td>
                                     <td class="align-middle">${item.nosurat}</td>
+                                    <td class="align-middle">${item.totalItem} barang</td>
                                     <td class="align-middle text-left">${item.hal}</td>
-                                    <td class="align-middle text-left">${item.deskripsi}</td>
+                                    <td class="align-middle text-left d-none">${item.deskripsi}</td>
                                     <td class="align-middle">${item.status}</td>
                                 </tr>
                             `);
@@ -278,7 +280,7 @@
                                 text: ' PDF',
                                 pageSize: 'A4',
                                 className: 'bg-danger',
-                                title: 'show',
+                                title: 'usulan',
                                 exportOptions: {
                                     columns: [2, 3, 4, 5, 6, 7]
                                 },
@@ -286,7 +288,7 @@
                                 extend: 'excel',
                                 text: ' Excel',
                                 className: 'bg-success',
-                                title: 'show',
+                                title: 'usulan',
                                 exportOptions: {
                                     columns: ':not(:nth-child(2))'
                                 },

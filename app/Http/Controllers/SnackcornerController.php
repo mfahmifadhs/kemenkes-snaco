@@ -422,6 +422,7 @@ class SnackcornerController extends Controller
                 'tanggal'   => Carbon::parse($row->tanggal_usulan)->isoFormat('HH:mm | DD MMM Y'),
                 'uker'      => ucwords(strtolower($row->user?->pegawai->uker->unit_kerja)),
                 'nosurat'   => $row->no_surat_usulan ?? '-',
+                'totalItem' => $row->usulanSnc->count(),
                 'hal'       => Str::limit($row->keterangan, 100),
                 'deskripsi' => $row->usulanSnc->map(function ($item) {
                     return Str::limit(' ' . $item->snc->snc_nama . ' ' . $item->snc->snc_deskripsi . ' (' . $item->jumlah_permintaan . ' ' . $item->snc->satuan->satuan . ')', 150);
