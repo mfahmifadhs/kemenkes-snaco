@@ -224,7 +224,7 @@
                                             </div>
                                         </a>
                                         <input type="hidden" class="form-control">
-                                        <input type="text" class="form-control form-control-sm text-center bg-white number" id="data-{{ $row->id_snc }}" name="qty" value="0" min="1" max="{{ $row->snc_maksimal }}">
+                                        <input type="text" class="form-control form-control-sm text-center bg-white number" id="data-{{ $row->id_snc }}" name="qty" value="0" min="1"  @if(Auth::user()->role_id == 4) max="{{ $row->snc_maksimal }}" @endif>
 
                                         <a type="button" class="add-button" data-id="data-{{ $row->id_snc }}">
                                             <div class="input-group-append">
