@@ -274,6 +274,7 @@ class SnackcornerController extends Controller
             $tambah->usulan_id          = $request->usulan_id;
             $tambah->snc_id             = $request->id_snc;
             $tambah->jumlah_permintaan  = $request->jumlah;
+            $tambah->status             = $snc->status_persetujuan == 'true' ? 'true' : 'false';
             $tambah->created_at         = Carbon::now();
             $tambah->save();
         }
@@ -288,12 +289,14 @@ class SnackcornerController extends Controller
         if ($snc) {
             $total = $snc->jumlah_permintaan + $request->jumlah;
             UsulanSnc::where('id_usulan_snc', $snc->id_usulan_snc)->update([
-                'jumlah_permintaan' => $request->jumlah
+                'jumlah_permintaan' => $request->jumlah,
+                'status'            => $snc->status_persetujuan == 'true' ? 'true' : 'false'
             ]);
         } else {
             UsulanSnc::where('id_usulan_snc', $request->id_usulan_snc)->update([
                 'snc_id'            => $request->id_snc,
-                'jumlah_permintaan' => $request->jumlah
+                'jumlah_permintaan' => $request->jumlah,
+                'status'            => $snc->status_persetujuan == 'true' ? 'true' : 'false'
             ]);
         }
 
