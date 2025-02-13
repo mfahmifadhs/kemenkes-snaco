@@ -260,7 +260,8 @@ class SnackcornerController extends Controller
 
     public function addItem(Request $request)
     {
-        $snc = UsulanSnc::where('snc_id', $request->id_snc)->where('usulan_id', $request->usulan_id)->first();
+        $snc    = UsulanSnc::where('snc_id', $request->id_snc)->where('usulan_id', $request->usulan_id)->first();
+        $usulan = Usulan::where('id_usulan', $request->usulan_id)->first();
 
         if ($snc) {
             $total = $snc->jumlah_permintaan + $request->jumlah;
@@ -275,7 +276,7 @@ class SnackcornerController extends Controller
             $tambah->usulan_id          = $request->usulan_id;
             $tambah->snc_id             = $request->id_snc;
             $tambah->jumlah_permintaan  = $request->jumlah;
-            $tambah->status             = $snc->usulan->status_persetujuan == 'true' ? 'true' : 'false';
+            $tambah->status             = $usulan->status_persetujuan == 'true' ? 'true' : 'false';
             $tambah->created_at         = Carbon::now();
             $tambah->save();
         }
