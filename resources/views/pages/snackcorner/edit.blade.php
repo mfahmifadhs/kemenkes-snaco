@@ -269,7 +269,7 @@
                         <select name="" id="kategori-add" class="w-75 form-control kategori" style="width: 75%;" required>
                             <option value="">-- Pilih Barang --</option>
                             @foreach ($kategori as $subRow)
-                            <option value="{{ $subRow->id_kategori }}" {{ $subRow->id_kategori == $row->snc->snc_kategori ? 'selected' : '' }}>
+                            <option value="{{ $subRow->id_kategori }}">
                                 {{ $subRow->nama_kategori }}
                             </option>
                             @endforeach
@@ -279,9 +279,7 @@
                     <div class="d-flex mt-2">
                         <label class="w-25 col-form-label">Pilih Merk</label>
                         <select name="id_snc" id="barang-add" class="w-75 form-control barang" style="width: 75%;" required>
-                            <option value="{{ $row->snc_id }}">
-                                {{ $row->snc->snc_nama }} {{ $row->snc->snc_deskripsi }}
-                            </option>
+                            <option value="">-- Pilih Barang --</option>
                         </select>
                     </div>
 
