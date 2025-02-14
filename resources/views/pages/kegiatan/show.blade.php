@@ -59,11 +59,11 @@
                                 <tbody>
                                     @if ($data == 0)
                                     <tr class="text-center">
-                                        <td colspan="9">Tidak ada data</td>
+                                        <td colspan="10">Tidak ada data</td>
                                     </tr>
                                     @else
                                     <tr>
-                                        <td colspan="9">Sedang mengambil data ...</td>
+                                        <td colspan="10">Sedang mengambil data ...</td>
                                     </tr>
                                     @endif
                                 </tbody>
