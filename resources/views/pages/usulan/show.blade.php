@@ -100,7 +100,7 @@
 
 <!-- Modal Filter -->
 <div class="modal fade" id="modalFilter" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-filter"></i> Filter</h5>
@@ -111,9 +111,22 @@
             <form method="GET" action="{{ route('usulan.show', $form) }}">
                 @csrf
                 <div class="modal-body">
+                    @if (Auth::user()->role_id != 4)
+                    <div class="form-group text-sm">
+                        <label>Pilih Unit Kerja</label>
+                        <select name="uker" class="form-control form-control-sm border-dark rounded">
+                            <option value="">Seluruh Unit Kerja</option>
+                            @foreach($ukerList as $row)
+                            <option value="{{ $row->id_unit_kerja }}" <?php echo $uker == $row->id_unit_kerja ? 'selected' : '' ?>>
+                                {{ $row->unit_kerja }}
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    @endif
                     <div class="form-group">
-                        <label class="text-xs">Pilih Tanggal</label>
-                        <select name="tanggal" class="form-control form-control-sm border-dark rounded text-center">
+                        <label class="text-sm">Pilih Tanggal</label>
+                        <select name="tanggal" class="form-control form-control-sm border-dark rounded">
                             <option value="">Semua Tanggal</option>
                             @foreach(range(1, 31) as $dateNumber)
                             @php $rowTgl = Carbon\Carbon::create()->day($dateNumber)->isoFormat('DD'); @endphp
@@ -124,8 +137,8 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="">Pilih Bulan</label>
-                        <select name="bulan" class="form-control form-control-sm border-dark rounded text-center">
+                        <label class="text-sm">Pilih Bulan</label>
+                        <select name="bulan" class="form-control form-control-sm border-dark rounded">
                             <option value="">Semua Bulan</option>
                             @foreach(range(1, 12) as $monthNumber)
                             @php $rowBulan = Carbon\Carbon::create()->month($monthNumber); @endphp
@@ -136,10 +149,10 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="">Pilih Tahun</label>
-                        <select name="tahun" class="form-control form-control-sm border-dark rounded text-center">
+                        <label class="text-sm">Pilih Tahun</label>
+                        <select name="tahun" class="form-control form-control-sm border-dark rounded">
                             <option value="">Semua Tahun</option>
-                            @foreach(range(2023, 2024) as $yearNumber)
+                            @foreach(range(2025,2026) as $yearNumber)
                             @php $rowTahun = Carbon\Carbon::create()->year($yearNumber); @endphp
                             <option value="{{ $rowTahun->isoFormat('Y') }}" <?php echo $tahun == $rowTahun->isoFormat('Y') ? 'selected' : '' ?>>
                                 {{ $rowTahun->isoFormat('Y') }}
@@ -148,8 +161,8 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="">Pilih Status</label>
-                        <select id="proses" name="proses" class="form-control form-control-sm text-capitalize border-dark">
+                        <label class="text-sm">Pilih Status</label>
+                        <select name="proses" class="form-control form-control-sm text-capitalize border-dark">
                             <option value="">Seluruh Status Proses</option>
                             <option value="verif" <?php echo $proses == 'verif' ? 'selected' : ''; ?>>Persetujuan</option>
                             <option value="proses" <?php echo $proses == 'proses' ? 'selected' : ''; ?>>Proses</option>
@@ -213,13 +226,13 @@
 
 <script>
     $(document).ready(function() {
-        let tanggal  = $('#tanggal').val();
-        let bulan    = $('#bulan').val();
-        let tahun    = $('#tahun').val();
-        let status   = $('#status').val();
-        let proses   = $('#proses').val();
-        let kategori = $('#kategori').val();
-        let uker     = `{{ $uker }}`;
+        let tanggal = $('[name="tanggal"]').val();
+        let bulan = $('[name="bulan"]').val();
+        let tahun = $('[name="tahun"]').val();
+        let status = $('[name="status"]').val();
+        let proses = $('[name="proses"]').val();
+        let kategori = $('[name="kategori"]').val();
+        let uker     = $('[name="uker"]').val();
 
         // Muat tabel saat halaman pertama kali dimuat
         loadTable(tanggal, bulan, tahun, status, proses, kategori, uker);

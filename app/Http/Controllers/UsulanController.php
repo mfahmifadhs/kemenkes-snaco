@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\emailOTP;
 use App\Models\SnackcornerKategori;
 use App\Models\SnackcornerKeranjang;
+use App\Models\UnitKerja;
 use App\Models\UsulanSnc;
 use App\Models\Usulan;
 use Carbon\Carbon;
@@ -37,7 +38,8 @@ class UsulanController extends Controller
             $query = $query->get();
         }
 
-        $usulan = $query->count();
+        $ukerList = UnitKerja::where('utama_id', '46593')->orderBy('unit_kerja', 'asc')->get();
+        $usulan   = $query->count();
 
         $aksi    = $request->get('aksi');
         $uker    = $request->get('uker_id');
@@ -45,8 +47,9 @@ class UsulanController extends Controller
         $tanggal = $request->get('tanggal');
         $bulan   = $request->get('bulan');
         $tahun   = $request->get('tahun');
+        $uker    = $request->get('uker');
 
-        return view('pages.usulan.show', compact('form', 'usulan', 'aksi', 'uker', 'proses', 'tanggal', 'bulan', 'tahun'));
+        return view('pages.usulan.show', compact('form', 'usulan', 'aksi', 'uker', 'proses', 'tanggal', 'ukerList','bulan', 'tahun', 'uker'));
     }
 
     public function select($id)
@@ -422,7 +425,8 @@ class UsulanController extends Controller
                     $pdf->SetXY(25, $posisiYNamaPenerima + 15);
                     $pdf->Write(0, $data['nama_penerima']);
 
-                    $pdf->SetXY(120, $posisiYNamaPenerima + 15);
+                    $posisiYNamaPetugas = $pdf->GetY();
+                    $pdf->SetXY(120, $posisiYNamaPetugas + 15);
                     $pdf->Write(0, $data['nama_petugas']);
                 }
 

@@ -35,10 +35,10 @@
                     Tambah Kegiatan
                 </label>
             </div>
-            <form id="form-submit" action="{{ route('kegiatan.store') }}" method="POST">
+            <form id="form-submit" action="{{ route('kegiatan.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
-                <div class="card-body small text-capitalize">
+                <div class="card-body text-capitalize">
                     <div class="d-flex">
                         <div class="w-50 text-left">
                             <label class="text-secondary"><i>Informasi Kegiatan</i></label>
@@ -73,6 +73,17 @@
                                     <input type="text" class="form-control rounded" name="keterangan" placeholder="Contoh : Kosongkan jika tidak ada keterangan">
                                 </span>
                             </div>
+
+                            <div class="input-group mt-3">
+                                <label class="w-25 col-form-label">Absensi</label>
+                                <span class="w-75 input-group"><span class="col-form-label mx-2">:</span>
+                                    <div class="btn btn-default btn-file w-75 border border-dark p-2">
+                                        <i class="fas fa-upload"></i> Upload File
+                                        <input type="file" class="form-control image" name="file" onchange="displaySelectedFile(this)" accept=".pdf" required>
+                                        <span id="selected-file-name"></span>
+                                    </div>
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -88,7 +99,6 @@
 
 @section('js')
 <script>
-
     function confirmSubmit(event, formId) {
         event.preventDefault();
 
@@ -116,6 +126,16 @@
                 cancelButtonText: 'Batal',
             }).then((result) => {
                 if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Proses...',
+                        text: 'Mohon menunggu.',
+                        icon: 'info',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
                     form.submit();
                 }
             });

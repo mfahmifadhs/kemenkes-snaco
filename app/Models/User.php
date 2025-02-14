@@ -40,4 +40,8 @@ class User extends Authenticatable
     public function keranjang() {
         return $this->hasMany(SnackcornerKeranjang::class, 'user_id');
     }
+
+    public function kegiatan() {
+        return $this->hasMany(Kegiatan::class, 'user_id');
+    }
 }

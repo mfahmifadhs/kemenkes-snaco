@@ -388,6 +388,17 @@
             });
         });
     </script>
+
+    <script>
+        function displaySelectedFile(input) {
+            var selectedFileName = "";
+            if (input.files.length > 0) {
+                selectedFileName = input.files[0].name;
+            }
+
+            document.getElementById("selected-file-name").textContent = selectedFileName;
+        }
+    </script>
 </body>
 
 </html>

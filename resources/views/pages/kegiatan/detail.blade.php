@@ -29,6 +29,9 @@
                     <a href="{{ route('kegiatan.edit', $kegiatan->id_kegiatan) }}" class="btn btn-warning border-dark btn-sm mt-1" onclick="confirmTrue(event)">
                         <i class="fas fa-edit"></i> Edit
                     </a>
+                    <a href="#" class="btn btn-default btn-sm mt-1 bg-danger rounded border-dark" onclick="confirmRemove(event, `{{ route('kegiatan.delete', $kegiatan->id_kegiatan) }}`)">
+                        <i class="fas fa-trash-alt"></i> Hapus
+                    </a>
                 </div>
             </div>
             <div class="card-body text-capitalize">
@@ -60,6 +63,15 @@
                         <div class="input-group">
                             <label class="w-25">Jumlah Barang</label>
                             <span class="w-75">: {{ $kegiatan->detail->count() }} barang</span>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="w-25">Absensi</label>
+                            <span class="w-75">:
+                                <a href="{{ route('kegiatan.lihat-pdf', $kegiatan->id_kegiatan) }}" class="btn btn-danger btn-xs" target="_blank">
+                                    <i class="fas fa-file-pdf"></i> <small>{{ $kegiatan->data_pendukung }}</small>
+                                </a>
+                            </span>
                         </div>
 
                         <div class="input-group">
@@ -110,8 +122,9 @@
 </script>
 @endif
 
+
 <script>
-    function confirm(event, url) {
+    function confirmRemove(event, url) {
         event.preventDefault();
 
         Swal.fire({
@@ -123,6 +136,16 @@
             cancelButtonText: 'Batal',
         }).then((result) => {
             if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Proses...',
+                    text: 'Mohon menunggu.',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
                 window.location.href = url;
             }
         });

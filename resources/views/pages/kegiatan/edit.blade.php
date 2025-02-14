@@ -26,7 +26,7 @@
                     Edit Kegiatan
                 </label>
             </div>
-            <form id="form-submit" action="{{ route('kegiatan.update', $kegiatan->id_kegiatan) }}" method="POST">
+            <form id="form-submit" action="{{ route('kegiatan.update', $kegiatan->id_kegiatan) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="card-body text-capitalize">
                     <div class="d-flex">
@@ -62,6 +62,29 @@
                                 <span class="w-75 input-group"><span class="col-form-label mx-2">:</span>
                                     <input type="text" class="form-control rounded" name="keterangan" value="{{ $kegiatan->keterangan }}">
                                 </span>
+                            </div>
+
+                            <div class="input-group mt-2">
+                                <label class="w-25 col-form-label">Absensi</label>
+                                <div class="w-75 input-group"><span class="col-form-label mx-2">:</span>
+                                    @if (!$kegiatan->data_pendukung)
+                                    <div class="btn btn-default btn-file w-75 border border-dark p-2">
+                                        <i class="fas fa-upload"></i> Upload File
+                                        <input type="file" class="form-control image" name="file" onchange="displaySelectedFile(this)" accept=".pdf" required>
+                                        <span id="selected-file-name"></span>
+                                    </div>
+                                    @endif
+
+                                    @if ($kegiatan->data_pendukung)
+                                    <a href="{{ route('kegiatan.lihat-pdf', $kegiatan->id_kegiatan) }}" class="btn btn-danger border-dark" target="_blank">
+                                        <i class="fas fa-file-pdf"></i> <small>{{ $kegiatan->data_pendukung }}</small>
+                                    </a>
+                                    <a href="#" class="btn btn-warning border-dark ml-2" onclick="confirmRemove(event, `{{ route('kegiatan.hapus-pdf', $kegiatan->id_kegiatan) }}`)">
+                                        <i class="fas fa-trash-alt"></i> <small>Hapus</small>
+                                    </a>
+                                    <input type="hidden" name="file" value="{{ $kegiatan->data_pendukung }}">
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -118,8 +141,8 @@
                     </div>
                 </div>
                 <div class="card-footer text-right">
-                    <button type="submit" class="btn btn-primary btn-sm" onclick="confirmSubmit(event, 'form-submit')">
-                        <i class="fas fa-paper-plane"></i> Submit
+                    <button type="submit" class="btn btn-success btn-sm" onclick="confirmSubmit(event, 'form-submit')">
+                        <i class="fas fa-save"></i> Simpan
                     </button>
                 </div>
             </form>
@@ -319,6 +342,15 @@
             cancelButtonText: 'Batal',
         }).then((result) => {
             if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Proses...',
+                    text: 'Mohon menunggu.',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
                 window.location.href = url;
             }
         });
@@ -327,13 +359,12 @@
     function confirmSubmit(event, formId) {
         event.preventDefault();
 
-        const form   = document.getElementById(formId);
-        const stok   = $(form).find('.stok').val();
+        const form = document.getElementById(formId);
+        const stok = $(form).find('.stok').val();
         const jumlah = $(form).find('.jumlah').val();
-        const sisa   = stok - jumlah;
+        const sisa = stok - jumlah;
         const requiredInputs = form.querySelectorAll('input[required]:not(:disabled), select[required]:not(:disabled), textarea[required]:not(:disabled)');
 
-        console.log(sisa)
         let allInputsValid = true;
 
         requiredInputs.forEach(input => {
@@ -362,6 +393,16 @@
                     cancelButtonText: 'Batal',
                 }).then((result) => {
                     if (result.isConfirmed) {
+                        Swal.fire({
+                            title: 'Proses...',
+                            text: 'Mohon menunggu.',
+                            icon: 'info',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+
                         form.submit();
                     }
                 });

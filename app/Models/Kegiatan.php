@@ -22,7 +22,8 @@ class Kegiatan extends Model
         'tanggal_kegiatan',
         'nama_kegiatan',
         'jumlah_peserta',
-        'keterangan'
+        'keterangan',
+        'data_pendukung'
     ];
 
     public function user()

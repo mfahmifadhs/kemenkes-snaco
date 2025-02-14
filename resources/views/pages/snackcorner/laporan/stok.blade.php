@@ -30,13 +30,13 @@
                 <div class="card border border-dark">
                     <div class="card-body">
                         <label class="small">Tabel Permintaan dan Pemakaian Snack Corner</label>
-                        <div class="table-responsive">
+                        <div class="table-responsive table-scroll">
                             <table class="table table-bordered text-xs">
                                 <thead>
                                     <tr class="text-center">
                                         <th class="align-middle">No</th>
                                         <th class="align-middle">Barang</th>
-                                        <th class="align-middle">Stok Gudang</th>
+                                        <th class="align-middle">Stok</th>
                                         @foreach ($uker as $row)
                                         <th class="align-middle">{{ ucwords(strtolower($row->singkatan)) }}</th>
                                         @endforeach

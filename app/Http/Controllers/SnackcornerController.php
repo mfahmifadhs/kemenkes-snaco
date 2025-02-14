@@ -16,6 +16,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 use Auth;
 use Str;
+use DB;
 
 class SnackcornerController extends Controller
 {
@@ -331,8 +332,8 @@ class SnackcornerController extends Controller
 
         if ($request->uker || $request->proses || $request->tanggal || $request->bulan || $request->tahun) {
             if ($request->uker) {
-                $res = $data->whereHas('pegawai', function ($query) use ($request) {
-                    $query->where('unit_kerja_id', $request->uker);
+                $res = $data->whereHas('user.pegawai.uker', function ($query) use ($request) {
+                    $query->where('id_unit_kerja', $request->uker);
                 });
             }
 
@@ -344,20 +345,20 @@ class SnackcornerController extends Controller
                 $res = $data->where('status_persetujuan', $request->proses);
             }
 
-            if ($request->proses != 'false' && $request->proses != 'verif') {
+            if ($request->proses == 'proses' && $request->proses == 'selesai') {
                 $res = $data->where('status_proses', $request->proses);
             }
 
             if ($request->tanggal) {
-                $res = $data->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%d')"), $request->tanggal);
+                $res = $data->whereDay('tanggal_usulan', $request->tanggal);
             }
 
             if ($request->bulan) {
-                $res = $data->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%m')"), $request->bulan);
+                $res = $data->whereMonth('tanggal_usulan', $request->bulan);
             }
 
             if ($request->tahun) {
-                $res = $data->where(DB::raw("DATE_FORMAT(tanggal_usulan, '%Y')"), $request->tahun);
+                $res = $data->whereYear('tanggal_usulan', $request->tahun);
             }
 
             $result = $res;

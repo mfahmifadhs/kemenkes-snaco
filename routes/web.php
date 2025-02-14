@@ -57,6 +57,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::group(['prefix' => 'kegiatan', 'as' => 'kegiatan.'], function () {
         Route::get('daftar', [KegiatanController::class, 'show'])->name('show');
+        Route::get('select-daftar', [KegiatanController::class, 'select'])->name('select');
         Route::get('daftar/barang', [KegiatanController::class, 'item'])->name('show.item');
         Route::get('daftar/barang/select', [KegiatanController::class, 'itemSelect'])->name('show.item.select');
         Route::get('tambah', [KegiatanController::class, 'create'])->name('create');
@@ -64,6 +65,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('edit/{id}', [KegiatanController::class, 'edit'])->name('edit');
         Route::get('hapus/{id}', [KegiatanController::class, 'delete'])->name('delete');
         Route::get('hapus/item/{id}', [KegiatanController::class, 'itemDelete'])->name('item.delete');
+        Route::get('lihat-pdf/{id}', [KegiatanController::class, 'viewPdf'])->name('lihat-pdf');
+        Route::get('hapus-pdf/{id}', [KegiatanController::class, 'deletePdf'])->name('hapus-pdf');
 
         Route::post('store', [KegiatanController::class, 'store'])->name('store');
         Route::post('update/{id}', [KegiatanController::class, 'update'])->name('update');
