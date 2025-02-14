@@ -282,7 +282,8 @@
 
     <!-- REQUIRED SCRIPTS -->
     <!-- jQuery -->
-    <script src="{{ asset('dist/js/jquery.min.js') }}"></script>
+    <!-- <script src="{{ asset('dist/js/jquery.min.js') }}"></script> -->
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <!-- Bootstrap -->
     <script src="{{ asset('dist/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <!-- overlayScrollbars -->
