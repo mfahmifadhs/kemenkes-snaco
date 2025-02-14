@@ -19,24 +19,20 @@ class AuthController extends Controller
         return view('login');
     }
 
-    public function post(Request $request, $id)
+    public function post(Request $request)
     {
-        if (Crypt::decrypt($id) == 'masuk.post') {
-            $request->validate([
-                'username'  => 'required',
-                'password'  => 'required',
-            ]);
+        $request->validate([
+            'username'  => 'required',
+            'password'  => 'required',
+        ]);
 
-            $credentials = $request->only('username', 'password');
+        $credentials = $request->only('username', 'password');
 
-            if (FacadesAuth::attempt($credentials)) {
-                return redirect()->intended('dashboard')->with('success', 'Berhasil Masuk!');
-            }
-
-            return redirect()->route('login')->with('failed', 'Username atau Password Salah');
-        } else {
-            return back()->with('failed', 'Anda Tidak Memiliki Akses !');
+        if (FacadesAuth::attempt($credentials)) {
+            return redirect()->intended('dashboard')->with('success', 'Berhasil Masuk!');
         }
+
+        return redirect()->route('login')->with('failed', 'Username atau Password Salah');
     }
 
     public function dashboard()

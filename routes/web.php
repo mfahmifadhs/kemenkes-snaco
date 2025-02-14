@@ -25,21 +25,68 @@ Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('email', [AuthController::class, 'email'])->name('email');
 Route::POST('email/update', [AuthController::class, 'email'])->name('email.update');
 
-Route::post('login/{id}', [AuthController::class, 'post'])->name('post.login');
+Route::post('login-post', [AuthController::class, 'post'])->name('login');
 
 
 Route::group(['middleware' => 'auth'], function () {
 
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Akses Super Admin
-    Route::group(['middleware' => ['access:master']], function () {
+    Route::get('user/profil/{id}', [UserController::class, 'profil'])->name('user.profil');
+    Route::get('user/profil/edit/{id}', [UserController::class, 'profilEdit'])->name('user.profil.edit');
 
+    // Akses Monitor
+    Route::group(['middleware' => ['access:monitor']], function () {
+
+        // Snack Corner
+        Route::group(['prefix' => 'snaco', 'as' => 'snaco.'], function () {
+            Route::get('laporan', [LaporanController::class, 'snaco'])->name('report');
+            Route::get('laporan/chart/{bulan}/{tahun}', [LaporanController::class, 'snacoChart'])->name('report.chart');
+            Route::get('laporan/stok', [LaporanController::class, 'snacoStok'])->name('report.stok');
+
+        });
+
+        // Jenis Barang
+        Route::group(['prefix' => 'jenis-snaco', 'as' => 'jenis-snaco.', 'middleware' => 'access:monitor'], function () {
+            Route::get('daftar', [SnackcornerKategoriController::class, 'show'])->name('show');
+            Route::get('tambah', [SnackcornerKategoriController::class, 'create'])->name('create')->middleware('access:admin');
+            Route::get('detail/{id}', [SnackcornerKategoriController::class, 'detail'])->name('detail');
+            Route::get('hapus/{id}', [SnackcornerKategoriController::class, 'delete'])->name('delete');
+            Route::get('edit/{id}', [SnackcornerKategoriController::class, 'edit'])->name('edit')->middleware('access:admin');
+            Route::post('proses-edit/{id}', [SnackcornerKategoriController::class, 'update'])->name('update');
+            Route::post('proses-tambah', [SnackcornerKategoriController::class, 'post'])->name('store');
+        });
     });
 
-    // Akses Super Admin / Admin / Super User
+    // Akses Super Admin
     Route::group(['middleware' => ['access:master']], function () {
+        // User
+        Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
+            Route::get('daftar', [UserController::class, 'show'])->name('show');
+            Route::get('tambah', [UserController::class, 'create'])->name('create');
+            Route::get('detail/{id}', [UserController::class, 'detail'])->name('detail');
+            Route::get('hapus/{id}', [UserController::class, 'delete'])->name('delete');
+            Route::get('edit/{id}', [UserController::class, 'edit'])->name('edit');
+            Route::post('proses-edit/{id}', [UserController::class, 'update'])->name('update');
+            Route::post('proses-tambah', [UserController::class, 'post'])->name('store');
+        });
 
+        // Pegawai
+        Route::group(['prefix' => 'pegawai', 'as' => 'pegawai.'], function () {
+            Route::get('selectUker/{id}', [PegawaiController::class, 'selectByUker']);
+            Route::get('daftar', [PegawaiController::class, 'show'])->name('show');
+            Route::get('edit/{id}', [PegawaiController::class, 'edit'])->name('edit');
+            Route::post('tambah', [PegawaiController::class, 'post'])->name('store');
+            Route::post('update/{id}', [PegawaiController::class, 'update'])->name('update');
+        });
+
+        // Unit Kerja
+        Route::group(['prefix' => 'unit-kerja', 'as' => 'unit-kerja.'], function () {
+            Route::get('select', [UkerController::class, 'select'])->name('select');
+            Route::get('selectUtama/{id}', [UkerController::class, 'selectByUtama']);
+            Route::get('daftar', [UkerController::class, 'show'])->name('show');
+            Route::post('proses-edit/{id}', [UkerController::class, 'update'])->name('update');
+        });
     });
 
     Route::group(['prefix' => 'usulan', 'as' => 'usulan.'], function () {
@@ -84,9 +131,6 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::group(['prefix' => 'snaco', 'as' => 'snaco.'], function () {
         Route::get('dashboard', [SnackcornerController::class, 'index'])->name('dashboard');
-        Route::get('laporan', [LaporanController::class, 'snaco'])->name('report');
-        Route::get('laporan/chart/{bulan}/{tahun}', [LaporanController::class, 'snacoChart'])->name('report.chart');
-        Route::get('laporan/stok', [LaporanController::class, 'snacoStok'])->name('report.stok');
 
         Route::get('show', [SnackcornerController::class, 'show'])->name('show');
         Route::get('barang/detail/{id}', [SnackcornerController::class, 'detailItem'])->name('detail.item');
@@ -97,19 +141,19 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('stok/uker/barang/{id}', [SnackcornerController::class, 'stokUker']);
 
-        Route::get('stok', [SnackcornerController::class, 'stok'])->name('stok.show');
-        Route::get('stok/detail/{id}', [SnackcornerController::class, 'stokDetail'])->name('stok.detail');
-        Route::get('stok/tambah', [SnackcornerController::class, 'stokCreate'])->name('stok.create');
-        Route::get('stok/edit/{id}', [SnackcornerController::class, 'stokEdit'])->name('stok.edit');
-        Route::get('stok/hapus/{id}', [SnackcornerController::class, 'stokDelete'])->name('stok.delete');
+        Route::get('stok', [SnackcornerController::class, 'stok'])->name('stok.show')->middleware('access:monitor');
+        Route::get('stok/detail/{id}', [SnackcornerController::class, 'stokDetail'])->name('stok.detail')->middleware('access:monitor');
+        Route::get('stok/tambah', [SnackcornerController::class, 'stokCreate'])->name('stok.create')->middleware('access:admin');
+        Route::get('stok/edit/{id}', [SnackcornerController::class, 'stokEdit'])->name('stok.edit')->middleware('access:admin');
+        Route::get('stok/hapus/{id}', [SnackcornerController::class, 'stokDelete'])->name('stok.delete')->middleware('access:admin');
 
         Route::get('stok/item/delete/{aksi}/{id}', [SnackcornerController::class, 'stokItemDelete'])->name('stok.item.delete');
 
-        Route::post('stok/store', [SnackcornerController::class, 'stokStore'])->name('stok.store');
-        Route::post('stok/update/{id}', [SnackcornerController::class, 'stokUpdate'])->name('stok.update');
-        Route::post('stok/item/daftar', [SnackcornerController::class, 'stokItemUpdate'])->name('stok.item.show');
-        Route::post('stok/item/update/{id}', [SnackcornerController::class, 'stokItemUpdate'])->name('stok.item.update');
-        Route::post('stok/item/tambah', [SnackcornerController::class, 'stokItemStore'])->name('stok.item.store');
+        Route::post('stok/store', [SnackcornerController::class, 'stokStore'])->name('stok.store')->middleware('access:admin');
+        Route::post('stok/update/{id}', [SnackcornerController::class, 'stokUpdate'])->name('stok.update')->middleware('access:admin');
+        Route::post('stok/item/daftar', [SnackcornerController::class, 'stokItemUpdate'])->name('stok.item.show')->middleware('access:admin');
+        Route::post('stok/item/update/{id}', [SnackcornerController::class, 'stokItemUpdate'])->name('stok.item.update')->middleware('access:admin');
+        Route::post('stok/item/tambah', [SnackcornerController::class, 'stokItemStore'])->name('stok.item.store')->middleware('access:admin');
 
         Route::get('detail/barang/{id}', [SnackcornerController::class, 'select'])->name('select');
         Route::get('detail/usulan/{id}', [SnackcornerController::class, 'detail'])->name('detail');
@@ -126,52 +170,4 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('barang/tambah', [SnackcornerController::class, 'addItem'])->name('item.store');
         Route::post('barang/update', [SnackcornerController::class, 'updateItem'])->name('item.update');
     });
-
-    // Jenis Barang
-    Route::group(['prefix' => 'jenis-snaco', 'as' => 'jenis-snaco.', 'middleware' => 'access:monitor'], function () {
-        Route::get('daftar', [SnackcornerKategoriController::class, 'show'])->name('show');
-        Route::get('tambah', [SnackcornerKategoriController::class, 'create'])->name('create')->middleware('access:admin');
-        Route::get('detail/{id}', [SnackcornerKategoriController::class, 'detail'])->name('detail');
-        Route::get('hapus/{id}', [SnackcornerKategoriController::class, 'delete'])->name('delete');
-        Route::get('edit/{id}', [SnackcornerKategoriController::class, 'edit'])->name('edit')->middleware('access:admin');
-        Route::post('proses-edit/{id}', [SnackcornerKategoriController::class, 'update'])->name('update');
-        Route::post('proses-tambah', [SnackcornerKategoriController::class, 'post'])->name('store');
-    });
-
-
-    // User
-    Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
-        Route::get('daftar', [UserController::class, 'show'])->name('show');
-        Route::get('profil/{id}', [UserController::class, 'profil'])->name('profil');
-        Route::get('profil/edit/{id}', [UserController::class, 'profilEdit'])->name('profil.edit');
-        Route::get('tambah', [UserController::class, 'create'])->name('create');
-        Route::get('detail/{id}', [UserController::class, 'detail'])->name('detail');
-        Route::get('hapus/{id}', [UserController::class, 'delete'])->name('delete');
-        Route::get('edit/{id}', [UserController::class, 'edit'])->name('edit');
-        Route::post('proses-edit/{id}', [UserController::class, 'update'])->name('update');
-        Route::post('proses-tambah', [UserController::class, 'post'])->name('store');
-    });
-
-    // Pegawai
-    Route::group(['prefix' => 'pegawai', 'as' => 'pegawai.'], function () {
-        Route::get('selectUker/{id}', [PegawaiController::class, 'selectByUker']);
-        // Route::get('select/{id}', [PegawaiController::class, 'select']);
-        // Route::get('daftar', [PegawaiController::class, 'index'])->name('index');
-        Route::get('daftar', [PegawaiController::class, 'show'])->name('show');
-        // Route::get('pegawai/detail/{id}', [PegawaiController::class, 'detail'])->name('detail');
-        // Route::get('pegawai/tambah', [PegawaiController::class, 'create'])->name('create');
-        // Route::get('pegawai/hapus/{id}', [PegawaiController::class, 'delete'])->name('delete');
-        Route::get('edit/{id}', [PegawaiController::class, 'edit'])->name('edit');
-        Route::post('tambah', [PegawaiController::class, 'post'])->name('store');
-        Route::post('update/{id}', [PegawaiController::class, 'update'])->name('update');
-    });
-
-    // Unit Kerja
-    Route::group(['prefix' => 'unit-kerja', 'as' => 'unit-kerja.'], function () {
-        Route::get('select', [UkerController::class, 'select'])->name('select');
-        Route::get('selectUtama/{id}', [UkerController::class, 'selectByUtama']);
-        Route::get('daftar', [UkerController::class, 'show'])->name('show');
-        Route::post('proses-edit/{id}', [UkerController::class, 'update'])->name('update');
-    });
-
 });
