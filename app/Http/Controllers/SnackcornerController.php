@@ -345,7 +345,7 @@ class SnackcornerController extends Controller
                 $res = $data->where('status_persetujuan', $request->proses);
             }
 
-            if ($request->proses == 'proses' && $request->proses == 'selesai') {
+            if ($request->proses == 'proses' || $request->proses == 'selesai') {
                 $res = $data->where('status_proses', $request->proses);
             }
 
