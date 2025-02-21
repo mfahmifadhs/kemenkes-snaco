@@ -117,6 +117,18 @@ class UsulanController extends Controller
         }
     }
 
+    public function update(Request $request, $id)
+    {
+        Usulan::where('id_usulan', $id)->update([
+            'tanggal_usulan' => $request->tanggal_usulan,
+            'tanggal_ambil'  => $request->tanggal_ambil,
+            'nama_penerima'  => $request->nama_penerima,
+            'keterangan'     => $request->keterangan
+        ]);
+
+        return redirect()->route('snaco.detail', $id)->with('success', 'Berhasil Menyimpan');
+    }
+
     public function delete($id)
     {
         $data = Usulan::with('form')->where('id_usulan', $id)->first();

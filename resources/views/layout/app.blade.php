@@ -283,7 +283,7 @@
     <!-- REQUIRED SCRIPTS -->
     <!-- jQuery -->
     <!-- <script src="{{ asset('dist/js/jquery.min.js') }}"></script> -->
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <!-- Bootstrap -->
     <script src="{{ asset('dist/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <!-- overlayScrollbars -->
@@ -398,6 +398,57 @@
             }
 
             document.getElementById("selected-file-name").textContent = selectedFileName;
+        }
+    </script>
+
+    <script>
+        function confirm(event, formId) {
+            event.preventDefault();
+
+            const form = document.getElementById(formId);
+            const requiredInputs = form.querySelectorAll('input[required]:not(:disabled), select[required]:not(:disabled), textarea[required]:not(:disabled)');
+
+            let allInputsValid = true;
+
+            requiredInputs.forEach(input => {
+                if (input.value.trim() === '') {
+                    input.style.borderColor = 'red';
+                    allInputsValid = false;
+                } else {
+                    input.style.borderColor = '';
+                }
+            });
+
+            if (allInputsValid) {
+                Swal.fire({
+                    title: 'Proses',
+                    text: '',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya',
+                    cancelButtonText: 'Batal',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: 'Proses...',
+                            text: 'Mohon menunggu.',
+                            icon: 'info',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+
+                        form.submit();
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Ada input yang diperlukan yang belum diisi.',
+                    icon: 'error'
+                });
+            }
         }
     </script>
 </body>

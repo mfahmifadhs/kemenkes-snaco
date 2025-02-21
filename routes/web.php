@@ -100,6 +100,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('delete/{id}', [UsulanController::class, 'delete'])->name('delete');
         Route::post('tambah', [UsulanController::class, 'store'])->name('store');
+        Route::post('update/{id}', [UsulanController::class, 'update'])->name('update');
     });
 
     Route::group(['prefix' => 'kegiatan', 'as' => 'kegiatan.'], function () {

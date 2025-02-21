@@ -55389,7 +55389,7 @@ a.text-muted:hover {
     /* Tinggi maksimal tabel untuk scroll */
     overflow-y: auto;
     /* Scroll hanya pada vertikal */
-    border: 1px solid #dee2e6;
+    border: 1px solid #000;
     /* Opsional: Tambahkan border */
 }
 

@@ -66,6 +66,8 @@
                             Masuk
                         </button>
                     </div>
+
+                    <div class="g-recaptcha" data-sitekey="6LfmZtkqAAAAAGmyghhExYEYAyasoRbE08e3vE18"></div>
                 </form>
 
                 <!-- <p class="mb-0">

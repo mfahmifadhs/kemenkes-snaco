@@ -86,6 +86,7 @@
             <div class="card-body small text-capitalize">
                 <div class="d-flex">
                     <div class="w-50 text-left">
+                        <a href="#" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-edit"></i></a>
                         <label>Detail Naskah</label>
                     </div>
                     <div class="w-50 text-right text-secondary">
@@ -292,6 +293,45 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                     <button type="submit" class="btn btn-primary" onclick="confirmSubmit(event, 'form-add')">Tambah</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Usulan</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="form" action="{{ route('usulan.update', $data->id_usulan) }}" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="tanggal_usulan">Tanggal Usulan</label>
+                        <input id="tanggal_usulan" type="date" class="form-control" name="tanggal_usulan" value="{{ Carbon\Carbon::parse($data->tanggal_usulan)->format('Y-m-d') }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="tanggal_ambil">Tanggal Ambil</label>
+                        <input id="tanggal_ambil" type="date" class="form-control" name="tanggal_ambil" value="{{ Carbon\Carbon::parse($data->tanggal_ambil)->format('Y-m-d') }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="nama_penerima">Nama Penerima</label>
+                        <input id="nama_penerima" type="text" class="form-control" name="nama_penerima" value="{{ $data->nama_penerima }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="keterangan">Keterangan</label>
+                        <textarea name="keterangan" class="form-control" id="keterangan">{{ $data->keterangan }}</textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="confirm(event, 'form')">Simpan</button>
                 </div>
             </form>
         </div>
