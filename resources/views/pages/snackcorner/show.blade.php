@@ -354,7 +354,7 @@
                         // Jika ada data
                         $.each(response, function(index, item) {
                             let actionButton = '';
-                            if (item.role == 1) {
+                            if (item.role == 1 || item.role == 2) {
                                 actionButton = `
                                     <a href="#" class="btn btn-default btn-xs bg-warning border-dark rounded" onclick="showModal('${item.id}')">
                                         <i class="fas fa-edit p-1" style="font-size: 12px;"></i>
