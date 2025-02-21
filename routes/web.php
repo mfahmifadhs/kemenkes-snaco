@@ -138,7 +138,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('edit/{id}', [SnackcornerController::class, 'edit'])->name('edit');
         Route::get('select', [SnackcornerController::class, 'selectAll'])->name('selectAll');
-        Route::POST('upload', [SnackcornerController::class, 'upload'])->name('upload')->middleware('access:master');
+        Route::POST('upload', [SnackcornerController::class, 'upload'])->name('upload')->middleware('access:admin');
 
         Route::get('stok/uker/barang/{id}', [SnackcornerController::class, 'stokUker']);
 

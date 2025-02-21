@@ -86,7 +86,9 @@
             <div class="card-body small text-capitalize">
                 <div class="d-flex">
                     <div class="w-50 text-left">
+                        @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 2)
                         <a href="#" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-edit"></i></a>
+                        @endif
                         <label>Detail Naskah</label>
                     </div>
                     <div class="w-50 text-right text-secondary">

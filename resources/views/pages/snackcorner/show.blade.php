@@ -405,7 +405,7 @@
                                         columns: [0, 12, 3, 4, 5, 6, 7, 8, 9, 10, 11]
                                     },
                                 },
-                                userRole == 1 ? {
+                                userRole == 1 || userRole == 2 ? {
                                     text: ' Upload',
                                     className: 'bg-primary',
                                     action: function(e, dt, button, config) {
