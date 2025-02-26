@@ -65,7 +65,7 @@ class SnackcornerController extends Controller
         if ($request->hasFile('foto')) {
             $file = $request->file('foto');
             $fileName = $file->getClientOriginalName();
-            $request->foto->move(public_path('dist/img/foto_snaco/'), $fileName);
+            $request->foto->move(public_path('dist/img/foto_snaco'), $fileName);
         }
 
         Snackcorner::where('id_snc', $request->id_snc)->update([
