@@ -557,6 +557,7 @@ class UsulanController extends Controller
                 'kode'       => $row->usulan->kode_usulan,
                 'foto'       => $foto,
                 'uker'       => $row->usulan->user->pegawai->uker->unit_kerja,
+                'hal'        => $row->usulan->keterangan,
                 'fileFoto'   => $row->snc->snc_foto,
                 'kategori'   => $row->snc->kategori->nama_kategori,
                 'barang'     => $row->snc->snc_nama,

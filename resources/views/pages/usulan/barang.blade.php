@@ -47,6 +47,7 @@
                                         <th>No</th>
                                         <th style="width: 5%;">Foto</th>
                                         <th style="width: 10%;" class="{{ Auth::user()->role_id == 4 ? 'd-none' : '' }}">Unit Kerja</th>
+                                        <th style="width: 5%;">Hal</th>
                                         <th>Kode</th>
                                         <th>Barang</th>
                                         <th>Merk</th>
@@ -180,6 +181,7 @@
                                     <td class="align-middle">${item.no}</td>
                                     <td class="align-middle">${item.foto}</td>
                                     <td class="align-middle text-left {{ Auth::user()->role_id == 4 ? 'd-none' : '' }}">${item.uker}</td>
+                                    <td class="align-middle">${item.hal}</td>
                                     <td class="align-middle">${item.kode}</td>
                                     <td class="align-middle">${item.kategori}</td>
                                     <td class="align-middle text-left">${item.barang}</td>
