@@ -89,12 +89,13 @@ class SnackcornerController extends Controller
         $kategori = $request->kategori;
         $barang   = $request->barang;
         $status   = $request->status;
+        $search   = $request->search;
 
         $data    = Snackcorner::orderBy('id_snc', 'asc')->orderBy('snc_status', 'desc');
         $no       = 1;
         $response = [];
 
-        if ($kategori || $barang) {
+        if ($kategori || $barang || $search) {
             if ($kategori) {
                 $res = $data->whereHas('kategori', function ($query) use ($kategori) {
                     $query->where('id_kategori', $kategori);
@@ -103,6 +104,11 @@ class SnackcornerController extends Controller
 
             if ($barang) {
                 $res = $data->where('id_snc', $barang);
+            }
+
+            if ($search) {
+                $res = $data->where('snc_nama', 'like', '%' . $search . '%')
+                    ->orWhere('snc_deskripsi', 'like', '%' . $search . '%');
             }
 
             $result = $res->get();
@@ -156,7 +162,7 @@ class SnackcornerController extends Controller
 
             if ($role != 4) {
                 $aksi .= '
-                    <a href="'. route('snaco.detail.item', $row->id_snc) .'" class="btn btn-default btn-xs bg-primary rounded border-dark">
+                    <a href="' . route('snaco.detail.item', $row->id_snc) . '" class="btn btn-default btn-xs bg-primary rounded border-dark">
                         <i class="fas fa-info-circle p-1" style="font-size: 12px;"></i>
                     </a>
                 ';

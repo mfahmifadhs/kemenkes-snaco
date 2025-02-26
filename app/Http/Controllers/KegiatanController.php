@@ -68,7 +68,7 @@ class KegiatanController extends Controller
             $aksi   = '';
             $status = '';
 
-            if ($role != 4) {
+            if ($role == 4) {
                 $aksi .= '
                     <a href="'. route('kegiatan.detail', $row->id_kegiatan) .'" class="btn btn-default btn-xs bg-primary rounded border-dark">
                         <i class="fas fa-info-circle p-1" style="font-size: 12px;"></i>

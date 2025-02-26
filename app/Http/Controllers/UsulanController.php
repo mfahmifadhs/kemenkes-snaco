@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\emailOTP;
+use App\Models\Snackcorner;
 use App\Models\SnackcornerKategori;
 use App\Models\SnackcornerKeranjang;
 use App\Models\UnitKerja;
@@ -471,11 +472,14 @@ class UsulanController extends Controller
 
     // ======================= BARANG =============================
 
-    public function itemShow()
+    public function itemShow(Request $request)
     {
         $role = Auth::user()->role_id;
         $uker = Auth::user()->pegawai->uker_id;
         $data = UsulanSnc::join('t_usulan','id_usulan','usulan_id')->with('usulan.user.pegawai');
+        $barangList   = Snackcorner::where('id_snc', $request->barang)->first();
+        $ukerList     = UnitKerja::where('utama_id', '46593')->orderBy('unit_kerja', 'asc')->get();
+        $kategoriList = SnackcornerKategori::orderBy('nama_kategori', 'asc')->get();
 
         if ($role == 4) {
             $barang = $data->whereHas('usulan.user.pegawai', function ($query) use ($uker) {
@@ -485,17 +489,45 @@ class UsulanController extends Controller
             $barang = $data->count();
         }
 
-        return view('pages.usulan.barang', compact('barang'));
+        $uker     = $request->uker;
+        $kategori = $request->kategori;
+        $snaco    = $request->barang ? $barangList : '';
+        return view('pages.usulan.barang', compact('barang','ukerList','kategoriList','uker','kategori','snaco'));
     }
 
-    public function itemSelectAll()
+    public function itemSelectAll(Request $request)
     {
         $uker = Auth::user()->pegawai->uker_id;
         $role = Auth::user()->role_id;
+        $uker     = $request->uker;
+        $kategori = $request->kategori;
+        $barang   = $request->barang;
 
-        $data = UsulanSnc::join('t_usulan','id_usulan','usulan_id')->with('usulan.user.pegawai');
-        $no       = 1;
-        $response = [];
+        $data = UsulanSnc::with('usulan.user.pegawai', 'snc');
+
+        if ($kategori || $barang || $uker) {
+            if ($uker) {
+                $res = $data->whereHas('usulan.user.pegawai', function ($query) use ($uker) {
+                    $query->where('uker_id', $uker);
+                });
+            }
+
+            if ($kategori) {
+                $res = $data->whereHas('snc', function ($query) use ($kategori) {
+                    $query->where('snc_kategori', $kategori);
+                });
+
+                $res = $data->where('snc_id', $kategori);
+            }
+
+            if ($barang) {
+                $res = $data->where('snc_id', $barang);
+            }
+
+            $result = $res->get();
+        } else {
+            $result = $data->get();
+        }
 
         if ($role == 4) {
             $result = $data->whereHas('usulan.user.pegawai', function ($query) use ($uker) {
@@ -505,6 +537,10 @@ class UsulanController extends Controller
             $result = $data->get();
         }
 
+        $totalBarang = $result->sum('jumlah_permintaan');
+
+        $no       = 1;
+        $response = [];
         foreach ($result as $row) {
             $aksi   = '';
             $status = '';
@@ -515,12 +551,12 @@ class UsulanController extends Controller
                 $foto = '<img src="https://cdn-icons-png.flaticon.com/512/679/679821.png" class="img-fluid" alt="">';
             }
 
-
             $response[] = [
                 'no'         => $no,
                 'id'         => $row->snc->id_snc,
                 'kode'       => $row->usulan->kode_usulan,
                 'foto'       => $foto,
+                'uker'       => $row->usulan->user->pegawai->uker->unit_kerja,
                 'fileFoto'   => $row->snc->snc_foto,
                 'kategori'   => $row->snc->kategori->nama_kategori,
                 'barang'     => $row->snc->snc_nama,
@@ -534,7 +570,9 @@ class UsulanController extends Controller
 
             $no++;
         }
-
-        return response()->json($response);
+        return response()->json([
+            'data' => $response,
+            'totalBarang' => $totalBarang
+        ]);
     }
 }
