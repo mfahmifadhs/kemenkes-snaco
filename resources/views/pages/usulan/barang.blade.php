@@ -181,7 +181,7 @@
                                     <td class="align-middle">${item.no}</td>
                                     <td class="align-middle">${item.foto}</td>
                                     <td class="align-middle text-left {{ Auth::user()->role_id == 4 ? 'd-none' : '' }}">${item.uker}</td>
-                                    <td class="align-middle">${item.hal}</td>
+                                    <td class="align-middle text-left">${item.hal}</td>
                                     <td class="align-middle">${item.kode}</td>
                                     <td class="align-middle">${item.kategori}</td>
                                     <td class="align-middle text-left">${item.barang}</td>
