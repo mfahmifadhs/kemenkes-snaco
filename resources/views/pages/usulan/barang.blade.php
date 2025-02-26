@@ -47,7 +47,7 @@
                                         <th>No</th>
                                         <th style="width: 5%;">Foto</th>
                                         <th style="width: 10%;" class="{{ Auth::user()->role_id == 4 ? 'd-none' : '' }}">Unit Kerja</th>
-                                        <th style="width: 5%;">Hal</th>
+                                        <th style="width: 10%;">Hal</th>
                                         <th>Kode</th>
                                         <th>Barang</th>
                                         <th>Merk</th>
