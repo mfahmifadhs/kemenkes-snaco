@@ -83,7 +83,7 @@
                     </div>
                     <div class="col-md-2 border border-dark">
                         @if ($data->snc_foto)
-                            <img src="{{ asset('storage/file/foto_snaco/' . $data->snc_foto) }}" class="img-fluid" alt="">
+                            <img src="{{ asset('dist/img/foto_snaco/' . $data->snc_foto) }}" class="img-fluid" alt="">
                         @else
                             <img src="https://cdn-icons-png.flaticon.com/512/679/679821.png" class="img-fluid" alt="">
                         @endif

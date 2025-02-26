@@ -141,7 +141,7 @@ class KegiatanController extends Controller
             $status = '';
 
             if ($row->snc->snc_foto) {
-                $foto = '<img src="' . asset('storage/file/foto_snaco/' . $row->snc->snc_foto) . '" class="img-fluid" alt="">';
+                $foto = '<img src="' . asset('dist/img/foto_snaco/' . $row->snc->snc_foto) . '" class="img-fluid" alt="">';
             } else {
                 $foto = '<img src="https://cdn-icons-png.flaticon.com/512/679/679821.png" class="img-fluid" alt="">';
             }

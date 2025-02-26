@@ -199,7 +199,7 @@
                         <div class="card card-psdia">
                             <div class="card-header">
                                 @if ($row->snc_foto)
-                                <img src="{{ asset('storage/file/foto_snaco/'. $row->snc_foto) }}" class="img-fluid" alt="">
+                                <img src="{{ asset('dist/img/foto_snaco/'. $row->snc_foto) }}" class="img-fluid" alt="">
                                 @else
                                 <img src="https://cdn-icons-png.flaticon.com/512/679/679821.png" class="img-fluid" alt="">
                                 @endif
@@ -327,7 +327,7 @@ $usul = Auth::user()->role_id == 1 || Auth::user()->role_id == 2 ? 'Stok Barang 
                                     </td>
                                     <td class="align-middle">
                                         @if ($row->snc->snc_foto)
-                                        <img src="{{ asset('storage/file/foto_snaco/'. $row->snc->snc_foto) }}" class="img-fluid" alt="">
+                                        <img src="{{ asset('dist/img/foto_snaco/'. $row->snc->snc_foto) }}" class="img-fluid" alt="">
                                         @else
                                         <img src="https://cdn-icons-png.flaticon.com/512/679/679821.png" class="img-fluid" alt="">
                                         @endif

@@ -65,7 +65,7 @@ class SnackcornerController extends Controller
         if ($request->hasFile('foto')) {
             $file = $request->file('foto');
             $fileName = $file->getClientOriginalName();
-            $file->storeAs('public/file/foto_snaco', $fileName);
+            $request->foto->move(public_path('dist/img/foto_snaco'), $fileName);
         }
 
         Snackcorner::where('id_snc', $request->id_snc)->update([
@@ -149,7 +149,7 @@ class SnackcornerController extends Controller
             }
 
             if ($row->snc_foto) {
-                $foto = '<img src="' . asset('storage/file/foto_snaco/' . $row->snc_foto) . '" class="img-fluid" alt="">';
+                $foto = '<img src="' . asset('dist/img/foto_snaco/' . $row->snc_foto) . '" class="img-fluid" alt="">';
             } else {
                 $foto = '<img src="https://cdn-icons-png.flaticon.com/512/679/679821.png" class="img-fluid" alt="">';
             }

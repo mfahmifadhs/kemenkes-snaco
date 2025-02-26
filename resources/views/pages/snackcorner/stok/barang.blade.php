@@ -176,7 +176,7 @@
                         $('#input-keterangan').val(data.snc_keterangan).change();
 
                         if (data.snc_foto) {
-                            $('#modal-foto').attr('src', `{{ asset('storage/file/foto_snaco/') }}/${data.snc_foto}`)
+                            $('#modal-foto').attr('src', `{{ asset('dist/img/foto_snaco/') }}/${data.snc_foto}`)
                         } else {
                             $('#modal-foto').attr('src', `https://cdn-icons-png.flaticon.com/512/679/679821.png`)
                         }
