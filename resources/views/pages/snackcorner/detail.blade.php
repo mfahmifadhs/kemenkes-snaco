@@ -31,12 +31,17 @@
                         <i class="fas fa-edit"></i> Edit
                     </a>
 
-                    <a href="#" class="btn btn-danger border-dark btn-xs mt-0 p-1" onclick="confirm(event, `{{ route('usulan.delete', $data->id_usulan) }}`)">
+                    <a href="#" class="btn btn-danger border-dark btn-xs mt-0 p-1" onclick="confirmLink(event, `{{ route('usulan.delete', $data->id_usulan) }}`)">
                         <i class="fas fa-trash-alt"></i> Hapus
                     </a>
                     @endif
 
                     @if ($data->status_persetujuan == 'true')
+                    @if ($data->status_proses != 'selesai')
+                    <a href="#" class="btn btn-primary border-dark btn-xs mt-0 p-1" onclick="confirmLink(event, `{{ route('usulan.resendToken', $data->id_usulan) }}`)">
+                        <i class="fas fa-paper-plane"></i> Resend Token
+                    </a>
+                    @endif
                     <span class="badge badge-success mt-2 p-2 border border-dark">
                         <i class="fas fa-check-circle"></i> Permintaan Diterima
                     </span>
@@ -173,6 +178,10 @@
                             <label class="w-25">Email</label>
                             <span class="w-75">: {{ $data->user->email }}</span>
                         </div>
+                        <div class="input-group">
+                            <label class="w-25">Penerima</label>
+                            <span class="w-75">: {{ $data->nama_penerima }}</span>
+                        </div>
                     </div>
                     <!-- <div class="col-md-12">
                             <div class="input-group">
@@ -222,25 +231,6 @@
     });
 </script>
 @endif
-
-<script>
-    function confirm(event, url) {
-        event.preventDefault();
-
-        Swal.fire({
-            title: 'Hapus',
-            text: '',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Ya',
-            cancelButtonText: 'Batal',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = url;
-            }
-        });
-    }
-</script>
 @endsection
 
 @endsection

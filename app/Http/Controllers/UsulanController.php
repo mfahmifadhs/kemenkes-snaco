@@ -145,6 +145,29 @@ class UsulanController extends Controller
         }
     }
 
+    public function resendToken($id)
+    {
+        $data = Usulan::with('form', 'user.pegawai.uker')->where('id_usulan', $id)->first();
+
+        $otp3 = rand(111111, 999999);
+        $tokenMail = Str::random(32);
+
+        $dataMail = [
+            'token' => $tokenMail,
+            'nama'  => $data->user->pegawai->nama_pegawai,
+            'uker'  => $data->user->pegawai->uker->unit_kerja,
+            'otp'   => $otp3
+        ];
+
+        Mail::to($data->user->email)->send(new emailOTP($dataMail));
+
+        Usulan::where('id_usulan', $id)->update([
+            'otp_3'              => $otp3,
+        ]);
+
+        return redirect()->route('snaco.detail', $id)->with('success', 'Berhasil Mengirim Ulang');
+    }
+
 
     // ===============================================
     //                   VERIFIKASI

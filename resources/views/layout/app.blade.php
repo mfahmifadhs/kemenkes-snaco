@@ -451,6 +451,37 @@
             }
         }
     </script>
+
+
+
+    <script>
+        function confirmLink(event, url) {
+            event.preventDefault();
+
+            Swal.fire({
+                title: 'Proses',
+                text: '',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Batal',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Proses...',
+                        text: 'Mohon menunggu.',
+                        icon: 'info',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    window.location.href = url;
+                }
+            });
+        }
+    </script>
 </body>
 
 </html>

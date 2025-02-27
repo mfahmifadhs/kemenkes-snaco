@@ -94,6 +94,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('daftar/barang', [UsulanController::class, 'itemShow'])->name('show.item');
         Route::get('daftar/barang/selectAll', [UsulanController::class, 'itemSelectAll'])->name('show.item.selectAll');
 
+        Route::get('resend-token/{id}', [UsulanController::class, 'resendToken'])->name('resendToken');
+
         Route::get('edit/{id}', [UsulanController::class, 'edit'])->name('edit');
         Route::get('surat/{id}', [UsulanController::class, 'surat'])->name('surat');
         Route::get('verifikasi/{id}', [UsulanController::class, 'verif'])->name('verif')->middleware('admVerif');
