@@ -378,11 +378,9 @@ $usul = Auth::user()->role_id == 1 || Auth::user()->role_id == 2 ? 'Stok Barang 
                     <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
                         <i class="fas fa-times-circle"></i> Tutup
                     </button>
-                    @if(Auth::user()->email)
                     <button type="button" class="btn btn-primary btn-sm" onclick="confirmSubmit(event)">
                         <i class="fas fa-paper-plane"></i> Submit
                     </button>
-                    @endif
                 </div>
             </div>
         </div>
