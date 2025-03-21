@@ -106,33 +106,6 @@
                 <div class="col-9">: {{ $data->user->pegawai->uker->unit_kerja }} | {{ $data->user->pegawai->uker->utama->unit_utama }}</div>
             </div>
         </div>
-        <!-- ========================= UKT & GDN ============================ -->
-        @if (in_array($data->form_id, [1,2]))
-        <div class="card-body">
-            <div class="table-container">
-                <table class="table table-bordered border border-dark">
-                    <thead class="h4 text-center">
-                        <tr>
-                            <th class="th" style="width: 5%;">No</th>
-                            <th class="th" style="width: 30%;">Judul</th>
-                            <th class="th">Uraian</th>
-                            <th class="th" style="width: 20%;">Keterangan</th>
-                        </tr>
-                    </thead>
-                    <tbody class="h4">
-                        @foreach ($data->detail as $row)
-                        <tr class="bg-white">
-                            <td class="text-center td">{{ $loop->iteration }}</td>
-                            <td class="td">{{ $row->gdn ? $row->gdn->nama_perbaikan .',' : '' }} {!! $row->judul !!}</td>
-                            <td class="td">{!! nl2br($row->uraian) !!}</td>
-                            <td class="td">{!! nl2br($row->keterangan) !!}</td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        @endif
 
         <!-- ========================== PERMINTAAN ================================= -->
         <div class="card-body h4" style="overflow-y: auto; max-height: 50vh;">
@@ -188,6 +161,8 @@
                         <h3>{{ $data->user->pegawai->nama_pegawai }}</h3>
                     </div>
                 </div>
+            </div>
+            <div class="footer-container">
                 @if ($data->status_proses == 'selesai')
                 <div class="row mt-5">
                     <div class="col-md-12">
