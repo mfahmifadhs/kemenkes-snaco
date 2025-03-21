@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <iframe src="{{ asset('storage/file/data-pendukung/absensi/' . $data->data_pendukung) }}"
+    <iframe src="{{ asset('dist/file/dakung/absensi/' . $data->data_pendukung) }}"
         width="100%"
         height="715px">
     </iframe>

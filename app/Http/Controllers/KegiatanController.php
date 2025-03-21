@@ -185,7 +185,7 @@ class KegiatanController extends Controller
         if ($request->hasFile('file')) {
             $file = $request->file('file');
             $fileName = $file->getClientOriginalName();
-            $file->storeAs('public/file/data-pendukung/absensi', $fileName);
+            $file->move(public_path('dist/file/dakung/absensi'), $fileName);
         } else {
             $fileName = null;
         }
