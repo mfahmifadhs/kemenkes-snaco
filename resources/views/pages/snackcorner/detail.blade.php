@@ -37,11 +37,11 @@
                     @endif
 
                     @if ($data->status_persetujuan == 'true')
-                    @if ($data->status_proses != 'selesai')
+                    <!-- @if ($data->status_proses != 'selesai')
                     <a href="#" class="btn btn-primary border-dark btn-xs mt-0 p-1" onclick="confirmLink(event, `{{ route('usulan.resendToken', $data->id_usulan) }}`)">
                         <i class="fas fa-paper-plane"></i> Resend Token
                     </a>
-                    @endif
+                    @endif -->
                     <span class="badge badge-success mt-2 p-2 border border-dark">
                         <i class="fas fa-check-circle"></i> Permintaan Diterima
                     </span>
