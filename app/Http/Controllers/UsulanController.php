@@ -227,6 +227,11 @@ class UsulanController extends Controller
 
     public function surat($id)
     {
+        $data  = Usulan::where('id_usulan', $id)->first();
+        $temp  = public_path('dist/format/format-46593.pdf');
+
+        return view('pages.usulan.surat', compact('data'));
+
         $query    = Usulan::where('id_usulan', $id)->first();
         $utama    = $query->user->pegawai->uker->utama_id;
         $template = public_path('dist/format/format-' . $utama . '.pdf');
