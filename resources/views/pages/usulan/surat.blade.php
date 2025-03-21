@@ -161,8 +161,6 @@
                         <h3>{{ $data->user->pegawai->nama_pegawai }}</h3>
                     </div>
                 </div>
-            </div>
-            <div class="footer-container">
                 @if ($data->status_proses == 'selesai')
                 <div class="row mt-5">
                     <div class="col-md-12">
