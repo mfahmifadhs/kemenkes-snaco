@@ -25,7 +25,7 @@ Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('email', [AuthController::class, 'email'])->name('email');
 Route::POST('email/update', [AuthController::class, 'email'])->name('email.update');
 
-Route::post('login-post', [AuthController::class, 'post'])->name('login');
+Route::post('login-post', [AuthController::class, 'post'])->name('login.post');
 
 
 Route::group(['middleware' => 'auth'], function () {
