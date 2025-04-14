@@ -35,14 +35,17 @@ class KegiatanController extends Controller
 
     public function select(Request $request)
     {
-        // dd($request->all());
         $role  = Auth::user()->role_id;
         $uker  = $request->uker;
         $absen = $request->absen;
 
-        $data    = Kegiatan::orderBy('id_kegiatan', 'asc')->orderBy('data_pendukung', 'desc');
+        $data     = Kegiatan::orderBy('id_kegiatan', 'asc')->orderBy('data_pendukung', 'desc');
         $no       = 1;
         $response = [];
+
+        if ($role == 4) {
+            $data = $data->where('user_id', Auth::user()->id);
+        }
 
         if ($uker || $absen) {
             if ($uker) {
