@@ -472,7 +472,6 @@
         const otp3 = `{{ $data->otp_3 }}`
         const form = document.getElementById('form-submit');
 
-        console.log(otp3)
         Swal.fire({
             title: 'Konfirmasi Pengambilan',
             text: 'Masukkan Kode OTP yang diterima oleh Unit Kerja',
