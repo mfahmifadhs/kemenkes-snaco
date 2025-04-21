@@ -469,14 +469,16 @@
     function confirmOtp(event) {
         event.preventDefault();
 
+        const otp3 = `{{ $data->otp_3 }}`
         const form = document.getElementById('form-submit');
 
+        console.log(otp3)
         Swal.fire({
             title: 'Konfirmasi Pengambilan',
             text: 'Masukkan Kode OTP yang diterima oleh Unit Kerja',
             icon: 'warning',
             html: `
-                <input type="number" id="input1" class="swal2-input w-75 border border-dark text-center" placeholder="Kode OTP">
+                <input type="number" id="input1" class="swal2-input w-75 border border-dark text-center" placeholder="Kode OTP" value="${otp3}">
                 <input type="date" id="input2" class="swal2-input w-75 border border-dark text-center" value="{{ Carbon\Carbon::now()->format('Y-m-d') }}" placeholder="Enter second value">
                 <input type="text" id="input3" class="swal2-input w-75 border border-dark text-center" placeholder="Nama Penerima">
             `,
