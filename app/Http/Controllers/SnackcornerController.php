@@ -23,7 +23,7 @@ class SnackcornerController extends Controller
     public function index()
     {
         $kategori = SnackcornerKategori::get();
-        $snaco    = Snackcorner::get();
+        $snaco    = Snackcorner::where('snc_status', 'true')->get();
         $role     = Auth::user()->role_id;
         $usulan   = Usulan::join('t_form', 'id_form', 'form_id')
             ->join('users', 'id', 'user_id')
@@ -242,7 +242,7 @@ class SnackcornerController extends Controller
 
     public function select($id)
     {
-        $data = Snackcorner::where('snc_kategori', $id)->orderBy('snc_nama', 'ASC')->get();
+        $data = Snackcorner::where('snc_kategori', $id)->orderBy('snc_nama', 'ASC')->where('snc_status', 'true')->get();
         $response = array();
 
         $response[] = array(
