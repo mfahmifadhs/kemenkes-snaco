@@ -242,7 +242,7 @@ class SnackcornerController extends Controller
 
     public function select($id)
     {
-        $data = Snackcorner::where('snc_kategori', $id)->orderBy('snc_nama', 'ASC')->where('snc_status', 'true')->get();
+        $data = Snackcorner::where('snc_kategori', $id)->orderBy('snc_nama', 'ASC')->get();
         $response = array();
 
         $response[] = array(
