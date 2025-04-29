@@ -35,4 +35,8 @@ class UsulanSnc extends Model
     public function snc() {
         return $this->belongsTo(Snackcorner::class, 'snc_id');
     }
+
+    public function satuan() {
+        return $this->belongsTo(Satuan::class, 'satuan_id');
+    }
 }

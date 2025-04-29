@@ -57,17 +57,29 @@
                     <div class="col-md-5">
                         <label class="text-secondary text-sm"><i>Informasi Ketersediaan</i></label>
                         <div class="input-group">
-                            <label class="w-25">Stok Awal</label>
-                            <span class="w-75">: {{ number_format($data->stokMasuk()->sum('jumlah'), 0, '.') }} {{ $data->satuan->satuan }}</span>
+                            <label class="w-25">Total Permintaan</label>
+                            @if (Auth::user()->role_id != 4)
+                            <span class="w-75">: {{ number_format($data->stokMasuk->sum('jumlah'), 0, '.') }} {{ $data->satuan->satuan }}</span>
+                            @else
+                            <span class="w-75">: {{ number_format($data->permintaan->sum('jumlah_permintaan'), 0, '.') }} {{ $data->satuan->satuan }}</span>
+                            @endif
                         </div>
                         <div class="input-group">
-                            <label class="w-25">Total Permintaan</label>
-                            <span class="w-75">: {{ number_format($data->stokKeluar()->sum('jumlah_permintaan'), 0, '.') }} {{ $data->satuan->satuan }}</span>
+                            <label class="w-25">Total Pemakaian</label>
+                            @if (Auth::user()->role_id != 4)
+                            <span class="w-75">: {{ number_format($data->stokKeluar->sum('jumlah_permintaan'), 0, '.') }} {{ $data->satuan->satuan }}</span>
+                            @else
+                            <span class="w-75">: {{ number_format($data->pemakaian->sum('jumlah'), 0, '.') }} {{ $data->satuan->satuan }}</span>
+                            @endif
                         </div>
 
                         <div class="input-group">
                             <label class="w-25">Sisa Stok</label>
+                            @if (Auth::user()->role_id != 4)
                             <span class="w-75">: {{ number_format($data->stok(), 0, '.') }} {{ $data->satuan->satuan }}</span>
+                            @else
+                            <span class="w-75">: {{ number_format($data->permintaan->sum('jumlah_permintaan') - $data->pemakaian->sum('jumlah'), 0, '.') }} {{ $data->satuan->satuan }}</span>
+                            @endif
                         </div>
 
                         <div class="input-group">
@@ -83,35 +95,47 @@
                     </div>
                     <div class="col-md-2 border border-dark">
                         @if ($data->snc_foto)
-                            <img src="{{ asset('dist/img/foto_snaco/' . $data->snc_foto) }}" class="img-fluid" alt="">
+                        <img src="{{ asset('dist/img/foto_snaco/' . $data->snc_foto) }}" class="img-fluid" alt="">
                         @else
-                            <img src="https://cdn-icons-png.flaticon.com/512/679/679821.png" class="img-fluid" alt="">
+                        <img src="https://cdn-icons-png.flaticon.com/512/679/679821.png" class="img-fluid" alt="">
                         @endif
                     </div>
                 </div>
             </div>
         </div>
 
+        @if (Auth::user()->role_id == 4)
         <div class="row">
             <div class="col-md-6">
                 <div class="card border border-dark">
                     <div class="card-body">
-                        <label class="text-secondary text-sm"><i>Pembelian</i></label>
+                        <div class="float-left">
+                            <label class="text-sm">Permintaan (Stok Awal)</label>
+                        </div>
+                        <div class="float-right">
+                            <label class="text-sm">
+                                Total {{ $data->permintaan->sum('jumlah_permintaan').' '.$data->satuan->satuan }}
+                            </label>
+                        </div>
                         <div class="table-responsive">
-                            <table id="table" class="table table-bordered border border-dark">
+                            <table id="tMasuk" class="table table-bordered border border-dark small">
                                 <thead class="text-center">
                                     <tr>
-                                        <th>No</th>
-                                        <th>Barang</th>
-                                        <th>Deskripsi</th>
-                                        <th>Stok Awal</th>
-                                        <th>Permintaan</th>
-                                        <th>Sisa Stok</th>
-                                        <th>Satuan</th>
+                                        <th style="width: 0%;">No</th>
+                                        <th style="width: 22%;">Tanggal</th>
+                                        <th>Keterangan</th>
+                                        <th style="width: 15%;">Jumlah</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-
+                                <tbody class="text-center">
+                                    @foreach ($data->permintaan as $row)
+                                    <tr onclick="window.location.href=`{{ route('snaco.detail', $row->usulan_id) }}`" style="cursor:pointer;">
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ Carbon\Carbon::parse($row->usulan->tanggal_usulan)->isoFormat('HH:mm DD MMM Y') }}</td>
+                                        <td class="text-left">{{ $row->usulan->keterangan }}</td>
+                                        <td>{{ $row->jumlah_permintaan.' '.$row->snc->satuan->satuan }}</td>
+                                    </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -121,22 +145,33 @@
             <div class="col-md-6">
                 <div class="card border border-dark">
                     <div class="card-body">
-                        <label class="text-secondary text-sm"><i>Permintaan</i></label>
+                        <div class="float-left">
+                            <label class="text-sm">Pemakaian</label>
+                        </div>
+                        <div class="float-right">
+                            <label class="text-sm">
+                                Total {{ $data->pemakaian->sum('jumlah').' '.$data->satuan->satuan }}
+                            </label>
+                        </div>
                         <div class="table-responsive">
-                            <table id="table" class="table table-bordered border border-dark">
+                            <table id="tKeluar" class="table table-bordered border border-dark small">
                                 <thead class="text-center">
                                     <tr>
-                                        <th>No</th>
-                                        <th>Barang</th>
-                                        <th>Deskripsi</th>
-                                        <th>Stok Awal</th>
-                                        <th>Permintaan</th>
-                                        <th>Sisa Stok</th>
-                                        <th>Satuan</th>
+                                        <th style="width: 0%;">No</th>
+                                        <th style="width: 22%;">Tanggal</th>
+                                        <th>Kegiatan</th>
+                                        <th style="width: 15%;">Jumlah</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-
+                                <tbody class="text-center">
+                                    @foreach ($data->pemakaian as $row)
+                                    <tr onclick="window.location.href=`{{ route('kegiatan.detail', $row->kegiatan_id) }}`" style="cursor:pointer;">
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ Carbon\Carbon::parse($row->kegiatan->tanggal_kegiatan)->isoFormat('DD MMM Y') }}</td>
+                                        <td class="text-left">{{ $row->kegiatan->nama_kegiatan }}</td>
+                                        <td>{{ $row->jumlah.' '.$row->snc->satuan->satuan }}</td>
+                                    </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -144,6 +179,7 @@
                 </div>
             </div>
         </div>
+        @endif
     </div>
 </div>
 
@@ -174,6 +210,42 @@
             }
         });
     }
+</script>
+
+<script>
+    $("#tMasuk").DataTable({
+        "responsive": false,
+        "lengthChange": true,
+        "autoWidth": false,
+        "info": true,
+        "paging": true,
+        "searching": true,
+        buttons: [{
+            extend: 'excel',
+            text: ' Excel',
+            className: 'bg-success',
+            title: 'show'
+        }].filter(Boolean),
+        "bDestroy": true
+    }).buttons().container().appendTo('#table-data_wrapper .col-md-6:eq(0)');
+</script>
+
+<script>
+    $("#tKeluar").DataTable({
+        "responsive": false,
+        "lengthChange": true,
+        "autoWidth": false,
+        "info": true,
+        "paging": true,
+        "searching": true,
+        buttons: [{
+            extend: 'excel',
+            text: ' Excel',
+            className: 'bg-success',
+            title: 'show'
+        }].filter(Boolean),
+        "bDestroy": true
+    }).buttons().container().appendTo('#table-data_wrapper .col-md-6:eq(0)');
 </script>
 @endsection
 

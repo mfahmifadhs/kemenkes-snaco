@@ -160,13 +160,11 @@ class SnackcornerController extends Controller
                 $status = '<span class="badge badge-danger p-1 w-100"><i class="fas fa-times-circle"></i> Tidak Tersedia</span>';
             }
 
-            if ($role != 4) {
-                $aksi .= '
-                    <a href="' . route('snaco.detail.item', $row->id_snc) . '" class="btn btn-default btn-xs bg-primary rounded border-dark">
-                        <i class="fas fa-info-circle p-1" style="font-size: 12px;"></i>
-                    </a>
-                ';
-            }
+            $aksi .= '
+                <a href="' . route('snaco.detail.item', $row->id_snc) . '" class="btn btn-default btn-xs bg-primary rounded border-dark">
+                    <i class="fas fa-info-circle p-1" style="font-size: 12px;"></i>
+                </a>
+            ';
 
             $response[] = [
                 'no'         => $no,

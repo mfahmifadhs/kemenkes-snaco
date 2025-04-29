@@ -45,6 +45,11 @@ class Snackcorner extends Model
         return $this->hasMany(UsulanSnc::class, 'snc_id');
     }
 
+    public function pemakaian()
+    {
+        return $this->hasMany(KegiatanDetail::class, 'snc_id');
+    }
+
     // =====================================================================
     //                          STOK BARANG
     // =====================================================================
