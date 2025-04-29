@@ -61,7 +61,7 @@
                             @if (Auth::user()->role_id != 4)
                             <span class="w-75">: {{ number_format($data->stokMasuk->sum('jumlah'), 0, '.') }} {{ $data->satuan->satuan }}</span>
                             @else
-                            <span class="w-75">: {{ number_format($data->permintaan->sum('jumlah_permintaan'), 0, '.') }} {{ $data->satuan->satuan }}</span>
+                            <span class="w-75">: {{ number_format($data->stokMasukUker->sum('jumlah_permintaan'), 0, '.') }} {{ $data->satuan->satuan }}</span>
                             @endif
                         </div>
                         <div class="input-group">
@@ -69,7 +69,7 @@
                             @if (Auth::user()->role_id != 4)
                             <span class="w-75">: {{ number_format($data->stokKeluar->sum('jumlah_permintaan'), 0, '.') }} {{ $data->satuan->satuan }}</span>
                             @else
-                            <span class="w-75">: {{ number_format($data->pemakaian->sum('jumlah'), 0, '.') }} {{ $data->satuan->satuan }}</span>
+                            <span class="w-75">: {{ number_format($data->stokKeluarUker->sum('jumlah'), 0, '.') }} {{ $data->satuan->satuan }}</span>
                             @endif
                         </div>
 
@@ -78,7 +78,7 @@
                             @if (Auth::user()->role_id != 4)
                             <span class="w-75">: {{ number_format($data->stok(), 0, '.') }} {{ $data->satuan->satuan }}</span>
                             @else
-                            <span class="w-75">: {{ number_format($data->permintaan->sum('jumlah_permintaan') - $data->pemakaian->sum('jumlah'), 0, '.') }} {{ $data->satuan->satuan }}</span>
+                            <span class="w-75">: {{ number_format($data->stokMasukUker->sum('jumlah_permintaan') - $data->stokKeluarUker->sum('jumlah'), 0, '.') }} {{ $data->satuan->satuan }}</span>
                             @endif
                         </div>
 
@@ -114,7 +114,7 @@
                         </div>
                         <div class="float-right">
                             <label class="text-sm">
-                                Total {{ $data->permintaan->sum('jumlah_permintaan').' '.$data->satuan->satuan }}
+                                Total {{ $data->stokMasukUker->sum('jumlah_permintaan').' '.$data->satuan->satuan }}
                             </label>
                         </div>
                         <div class="table-responsive">
@@ -128,7 +128,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="text-center">
-                                    @foreach ($data->permintaan as $row)
+                                    @foreach ($data->stokMasukUker as $row)
                                     <tr onclick="window.location.href=`{{ route('snaco.detail', $row->usulan_id) }}`" style="cursor:pointer;">
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ Carbon\Carbon::parse($row->usulan->tanggal_usulan)->isoFormat('HH:mm DD MMM Y') }}</td>
@@ -150,7 +150,7 @@
                         </div>
                         <div class="float-right">
                             <label class="text-sm">
-                                Total {{ $data->pemakaian->sum('jumlah').' '.$data->satuan->satuan }}
+                                Total {{ $data->stokKeluarUker->sum('jumlah').' '.$data->satuan->satuan }}
                             </label>
                         </div>
                         <div class="table-responsive">
@@ -164,7 +164,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="text-center">
-                                    @foreach ($data->pemakaian as $row)
+                                    @foreach ($data->stokKeluarUker as $row)
                                     <tr onclick="window.location.href=`{{ route('kegiatan.detail', $row->kegiatan_id) }}`" style="cursor:pointer;">
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ Carbon\Carbon::parse($row->kegiatan->tanggal_kegiatan)->isoFormat('DD MMM Y') }}</td>
