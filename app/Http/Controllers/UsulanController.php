@@ -73,6 +73,17 @@ class UsulanController extends Controller
             return redirect()->route('snaco.dashboard')->with('failed', 'Anda belum memilih barang');
         }
 
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+
+            if ($file->getSize() > 5 * 1024 * 1024) {
+                return back()->with('failed', 'Ukuran file maksimal 5 MB.');
+            }
+
+            $fileSurat = $file->getClientOriginalName();
+            $file->move(public_path('dist/file/dakung/surat'), $fileSurat);
+        }
+
         // USULAN
         $id = Usulan::withTrashed()->count() + 1;
         $usulan  = new Usulan();
@@ -82,6 +93,7 @@ class UsulanController extends Controller
         $usulan->form_id        = $request->form_id;
         $usulan->tanggal_usulan = Carbon::now();
         $usulan->keterangan     = $request->keterangan;
+        $usulan->file_surat     = $fileSurat ?? null;
         $usulan->otp_1          = rand(111111, 999999);
         $usulan->created_at     = Carbon::now();
         $usulan->save();
@@ -120,11 +132,25 @@ class UsulanController extends Controller
 
     public function update(Request $request, $id)
     {
+        $data = Usulan::where('id_usulan', $id)->first();
+
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+
+            if ($file->getSize() > 5 * 1024 * 1024) {
+                return back()->with('failed', 'Ukuran file maksimal 5 MB.');
+            }
+
+            $fileSurat = $file->getClientOriginalName();
+            $file->move(public_path('dist/file/dakung/surat'), $fileSurat);
+        }
+
         Usulan::where('id_usulan', $id)->update([
-            'tanggal_usulan' => $request->tanggal_usulan,
-            'tanggal_ambil'  => $request->tanggal_ambil,
-            'nama_penerima'  => $request->nama_penerima,
-            'keterangan'     => $request->keterangan
+            'tanggal_usulan' => $request->tanggal_usulan ?? $data->tanggal_usulan,
+            'tanggal_ambil'  => $request->tanggal_ambil ?? $data->tanggal_ambil,
+            'nama_penerima'  => $request->nama_penerima ?? $data->nama_penerima,
+            'keterangan'     => $request->keterangan ?? $data->keterangan,
+            'file_surat'     => $fileSurat ?? $data->file_surat
         ]);
 
         return redirect()->route('snaco.detail', $id)->with('success', 'Berhasil Menyimpan');
@@ -208,14 +234,15 @@ class UsulanController extends Controller
             })->count() + 1;
             $tahunSurat  = Carbon::now()->format('Y');
 
-            $format = $klasifikasi . '/' . $kodeSurat . '/' . $nomorSurat . '/' . $tahunSurat;
+            $format  = $klasifikasi . '/' . $kodeSurat . '/' . $nomorSurat . '/' . $tahunSurat;
+            $catatan = $request->alasan_penolakan ?? $request->catatan;
 
             Usulan::where('id_usulan', $id)->update([
                 'verif_id'           => Auth::user()->pegawai_id,
                 'nomor_usulan'       => $request->persetujuan == 'true' ? $format : null,
                 'status_persetujuan' => $request->persetujuan,
                 'status_proses'      => $request->persetujuan == 'true' ? 'proses' : null,
-                'keterangan_tolak'   => $request->alasan_penolakan ?? null,
+                'keterangan_tolak'   => $catatan ?? null,
                 'tanggal_ambil'      => $request->tanggal_ambil ?? null,
                 'otp_2'              => $request->persetujuan == 'true' ? rand(111111, 999999) : null,
                 'otp_3'              => $otp3,
@@ -603,5 +630,23 @@ class UsulanController extends Controller
             'data' => $response,
             'totalBarang' => $totalBarang
         ]);
+    }
+
+
+    public function viewSurat($id)
+    {
+        $data = Usulan::where('id_usulan', $id)->first();
+
+        return view('pages.usulan.pdf-surat', compact('id', 'data'));
+    }
+
+
+    public function deleteSurat($id)
+    {
+        Usulan::where('id_usulan', $id)->update([
+            'file_surat' => null
+        ]);
+
+        return redirect()->route('usulan.edit', $id)->with('success', 'Berhasil Menghapus');
     }
 }

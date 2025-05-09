@@ -83,7 +83,7 @@
                         </h6>
                     </span> -->
             </div>
-            <div class="card-body small text-capitalize">
+            <div class="card-body small">
                 <div class="d-flex">
                     <div class="w-50 text-left">
                         @if (Auth::user()->role_id == 1 || Auth::user()->role_id == 2)
@@ -92,7 +92,7 @@
                         <label>Detail Naskah</label>
                     </div>
                     <div class="w-50 text-right text-secondary">
-                        #{{ Carbon\Carbon::parse($data->created_at)->format('dmyHis').$data->id_pengajuan }}-{{ $data->id_usulan }}
+                        {{ $data->kode_usulan }}#{{ Carbon\Carbon::parse($data->created_at)->format('dmyHis').$data->id_pengajuan }}-{{ $data->id_usulan }}
                     </div>
                 </div>
                 <div class="row">
@@ -108,14 +108,6 @@
                         </div>
 
                         <div class="input-group">
-                            <label class="w-25">Unit Kerja</label>
-                            <span class="w-75">:
-                                {{ ucwords(strtolower($data->user->pegawai->uker->unit_kerja)) }} |
-                                {{ ucwords(strtolower($data->user->pegawai->uker->utama->unit_utama)) }}
-                            </span>
-                        </div>
-
-                        <div class="input-group">
                             <label class="w-25">Nama Pegawai</label>
                             <span class="w-75">: {{ $data->user->pegawai->nama_pegawai }}</span>
                         </div>
@@ -124,6 +116,33 @@
                             <label class="w-25">Jabatan</label>
                             <span class="w-75">: {{ ucwords(strtolower($data->user->pegawai->jabatan->jabatan)) }}</span>
                         </div>
+
+                        <div class="input-group">
+                            <label class="w-25">Unit Kerja</label>
+                            <span class="w-75">:
+                                {{ ucwords(strtolower($data->user->pegawai->uker->unit_kerja)) }} |
+                                {{ ucwords(strtolower($data->user->pegawai->uker->utama->unit_utama)) }}
+                            </span>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="w-25">Keterangan</label>
+                            <span class="w-75">: {{ $data->keterangan }}</span>
+                        </div>
+
+                        @if ($data->status_persetujuan == 'false')
+                        <div class="input-group">
+                            <label class="w-25">Alasan Ditolak</label>
+                            <span class="w-75 text-danger">: {{ $data->keterangan_tolak }}</span>
+                        </div>
+                        @endif
+
+                        @if ($data->status_persetujuan == 'true' && $data->keterangan_tolak)
+                        <div class="input-group">
+                            <label class="w-25">Catatan</label>
+                            <span class="w-75">: {{ $data->keterangan_tolak }}</span>
+                        </div>
+                        @endif
 
 
                     </div>
@@ -140,9 +159,48 @@
                                 </a>
                             </span>
                         </div>
+
                         <div class="input-group">
-                            <label class="w-25">Keterangan</label>
-                            <span class="w-75">: {{ $data->keterangan }}</span>
+                            <label class="w-25">Email</label>
+                            <span class="w-75">: {{ $data->user->email }}</span>
+                        </div>
+
+                        @if ($data->nama_penerima)
+                        <div class="input-group">
+                            <label class="w-25">Penerima</label>
+                            <span class="w-75">: {{ $data->nama_penerima }}</span>
+                        </div>
+                        @endif
+
+                        <div class="input-group">
+                            <label class="w-100 text-secondary my-2">Data Pendukung</label>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="w-25">Surat</label>
+                            <span class="w-75">
+                                @if (!$data->file_surat)
+                                <form id="form-update" action="{{ route('usulan.update', $data->id_usulan) }}" method="POST" enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="btn btn-default btn-xs btn-file w-75 border border-dark p-2">
+                                        <i class="fas fa-upload"></i> Upload File
+                                        <input type="file" class="form-control image" name="file" onchange="displaySelectedFile(this)" accept=".pdf" required>
+                                        <span id="selected-file-name"></span>
+                                    </div><br>
+                                    <button type="submit" class="btn btn-primary btn-xs mt-1" onclick="confirmSubmit(event, `form-update`)">Simpan</button>
+                                </form>
+                                @endif
+
+                                @if ($data->file_surat)
+                                <a href="#" class="text-danger border-dark ml-2" onclick="confirmRemove(event, `{{ route('usulan.hapus-surat', $data->id_usulan) }}`)">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                                <a href="{{ route('usulan.lihat-surat', $data->id_usulan) }}" target="_blank">
+                                    <i class="fas fa-file-pdf"></i> <u>Lihat Surat</u>
+                                </a>
+                                <input type="hidden" name="file" value="{{ $data->file_surat }}">
+                                @endif
+                            </span>
                         </div>
                     </div>
                     <!-- <div class="col-md-12">
@@ -156,7 +214,7 @@
             <div class="card-body small">
                 <div class="d-flex">
                     <label class="w-50">
-                        <i class="fas fa-boxes"></i> Daftar Barang
+                        Daftar Barang
                     </label>
                     <label class="w-50 text-right">
                         <a href="#" class="btn btn-default btn-xs bg-primary rounded" data-toggle="modal" data-target="#tambahItem">
@@ -173,7 +231,6 @@
                                 <th style="width: 20%;">Barang</th>
                                 <th style="width: 30%;">Deskripsi</th>
                                 <th style="width: 10%;">Jumlah</th>
-                                <th style="width: 10%;">Satuan</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -240,8 +297,7 @@
                                 </td>
                                 <td class="text-left">{{ $row->snc->kategori->nama_kategori }}</td>
                                 <td class="text-left">{{ $row->snc->snc_nama }}</td>
-                                <td>{{ $row->jumlah_permintaan }}</td>
-                                <td>{{ $row->snc->satuan->satuan }}</td>
+                                <td>{{ $row->jumlah_permintaan.' '.$row->snc->satuan->satuan }}</td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -393,6 +449,15 @@
             cancelButtonText: 'Batal',
         }).then((result) => {
             if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Proses...',
+                    text: 'Mohon menunggu.',
+                    icon: 'info',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
                 window.location.href = url;
             }
         });
@@ -425,6 +490,16 @@
                 cancelButtonText: 'Batal',
             }).then((result) => {
                 if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Proses...',
+                        text: 'Mohon menunggu.',
+                        icon: 'info',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
                     form.submit();
                 }
             });

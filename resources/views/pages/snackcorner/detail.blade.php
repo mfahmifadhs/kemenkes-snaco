@@ -27,11 +27,11 @@
                 </label>
                 <div class="card-tools">
                     @if ((!$data->status_persetujuan) || ($data->status_persetujuan && in_array(Auth::user()->id, [1, 2])))
-                    <a href="{{ route('usulan.edit', $data->id_usulan) }}" class="btn btn-warning border-dark btn-xs mt-0 p-1">
+                    <a href="{{ route('usulan.edit', $data->id_usulan) }}" class="badge badge-warning mt-2 p-2 border border-dark">
                         <i class="fas fa-edit"></i> Edit
                     </a>
 
-                    <a href="#" class="btn btn-danger border-dark btn-xs mt-0 p-1" onclick="confirmLink(event, `{{ route('usulan.delete', $data->id_usulan) }}`)">
+                    <a href="#" class="badge badge-danger mt-2 p-2 border border-dark" onclick="confirmLink(event, `{{ route('usulan.delete', $data->id_usulan) }}`)">
                         <i class="fas fa-trash-alt"></i> Hapus
                     </a>
                     @endif
@@ -108,11 +108,11 @@
                         <label>Detail Naskah</label>
                     </div>
                     <div class="w-50 text-right text-secondary">
-                        #{{ Carbon\Carbon::parse($data->created_at)->format('dmyHis').$data->id_pengajuan }}-{{ $data->id_usulan }}
+                        {{ $data->kode_usulan }}#{{ Carbon\Carbon::parse($data->created_at)->format('dmyHis').$data->id_pengajuan }}-{{ $data->id_usulan }}
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-7">
+                    <div class="col-md-6">
                         <div class="input-group">
                             <label class="w-25">Tanggal {{ $data->kategori }}</label>
                             <span class="w-75">: {{ $data->tanggal_usulan }}</span>
@@ -153,34 +153,60 @@
                         </div>
                         @endif
 
+                        @if ($data->status_persetujuan == 'true' && $data->keterangan_tolak && Auth::user()->role_id != 4)
+                        <div class="input-group">
+                            <label class="w-25">Catatan</label>
+                            <span class="w-75">: {{ $data->keterangan_tolak }}</span>
+                        </div>
+                        @endif
+
 
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-6">
                         @if ($data->tanggal_ambil)
                         <div class="input-group">
                             <label class="w-25">Tanggal Ambil</label>
                             <span class="w-75">: {{ Carbon\Carbon::parse($data->tanggal_ambil)->isoFormat('DD MMMM Y') }}</span>
                         </div>
                         @endif
+
                         <div class="input-group">
                             <label class="w-25">Nomor Naskah</label>
                             <span class="w-75 text-uppercase">: {{ $data->nomor_usulan }}</span>
                         </div>
+
                         <div class="input-group">
-                            <label class="w-25">Surat</label>
+                            <label class="w-25">Surat Pengajuan</label>
                             <span class="w-75">:
                                 <a href="{{ route('usulan.surat', $data->id_usulan) }}" target="_blank">
                                     <u><i class="fas fa-file-alt"></i> Lihat Surat</u>
                                 </a>
                             </span>
                         </div>
+
                         <div class="input-group">
                             <label class="w-25">Email</label>
                             <span class="w-75">: {{ $data->user->email }}</span>
                         </div>
+
+                        @if ($data->nama_penerima)
                         <div class="input-group">
                             <label class="w-25">Penerima</label>
                             <span class="w-75">: {{ $data->nama_penerima }}</span>
+                        </div>
+                        @endif
+
+                        <div class="input-group">
+                            <label class="w-100 text-secondary my-2">Data Pendukung</label>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="w-25">Surat</label>
+                            <span class="w-75">:
+                                <a href="{{ route('usulan.lihat-surat', $data->id_usulan) }}" target="_blank">
+                                    <i class="fas fa-file-pdf"></i> <u>Lihat Surat</u>
+                                </a>
+                            </span>
                         </div>
                     </div>
                     <!-- <div class="col-md-12">
@@ -201,7 +227,6 @@
                                 <th>Barang</th>
                                 <th>Deskripsi</th>
                                 <th>Jumlah</th>
-                                <th>Satuan</th>
                             </tr>
                         </thead>
                         <tbody class="text-xs">
@@ -210,8 +235,7 @@
                                 <td class="text-center">{{ $loop->iteration }}</td>
                                 <td>{{ $row->snc->snc_nama }}</td>
                                 <td>{{ $row->snc->snc_deskripsi }}</td>
-                                <td class="text-center">{{ $row->jumlah_permintaan   }}</td>
-                                <td class="text-center">{{ $row->snc->satuan->satuan }}</td>
+                                <td class="text-center">{{ $row->jumlah_permintaan.' '.$row->snc->satuan->satuan }}</td>
                             </tr>
                             @endforeach
                         </tbody>

@@ -224,7 +224,7 @@
                                             </div>
                                         </a>
                                         <input type="hidden" class="form-control">
-                                        <input type="text" class="form-control form-control-sm text-center bg-white number" id="data-{{ $row->id_snc }}" name="qty" value="0" min="1"  @if(Auth::user()->role_id == 4) max="{{ $row->snc_maksimal }}" @endif>
+                                        <input type="text" class="form-control form-control-sm text-center bg-white number" id="data-{{ $row->id_snc }}" name="qty" value="0" min="1" @if(Auth::user()->role_id == 4) max="{{ $row->snc_maksimal }}" @endif>
 
                                         <a type="button" class="add-button" data-id="data-{{ $row->id_snc }}">
                                             <div class="input-group-append">
@@ -257,7 +257,7 @@ $route = Auth::user()->role_id == 1 || Auth::user()->role_id == 2 ? route('snaco
 $method = Auth::user()->role_id == 1 || Auth::user()->role_id == 2 ? 'GET' : 'POST';
 $usul = Auth::user()->role_id == 1 || Auth::user()->role_id == 2 ? 'Stok Barang Masuk' : 'Permintaan Snack Corner';
 @endphp
-<form id="form" action="{{ $route }}" method="{{ $method }}">
+<form id="form" action="{{ $route }}" method="{{ $method }}" enctype="multipart/form-data">
     @csrf
     <div class="modal fade" id="basket" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable modal-xl" role="document">
@@ -290,8 +290,17 @@ $usul = Auth::user()->role_id == 1 || Auth::user()->role_id == 2 ? 'Stok Barang 
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label class="text-sm">Rencana Pengguna</label>
-                                <textarea name="keterangan" class="form-control" required></textarea>
+                                <div class="form-group">
+                                    <label class="text-sm">Rencana Pengguna</label>
+                                    <textarea name="keterangan" class="form-control" required></textarea>
+
+                                    <label class="text-sm mt-2">Data Pendukung <br> <small>surat undangan rapat/kegiatan</small></label>
+                                    <div class="btn btn-default btn-block btn-sm btn-file border-dark">
+                                        <i class="fas fa-paperclip"></i> Upload File (PDF)
+                                        <input type="file" name="file" onchange="displaySelectedFile(this)" accept="application/pdf">
+                                        <span id="selected-file-name"></span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

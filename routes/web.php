@@ -100,6 +100,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('surat/{id}', [UsulanController::class, 'surat'])->name('surat');
         Route::get('verifikasi/{id}', [UsulanController::class, 'verif'])->name('verif')->middleware('admVerif');
 
+        Route::get('lihat-surat/{id}', [UsulanController::class, 'viewSurat'])->name('lihat-surat');
+        Route::get('hapus-surat/{id}', [UsulanController::class, 'deleteSurat'])->name('hapus-surat');
+
         Route::get('delete/{id}', [UsulanController::class, 'delete'])->name('delete');
         Route::post('tambah', [UsulanController::class, 'store'])->name('store');
         Route::post('update/{id}', [UsulanController::class, 'update'])->name('update');

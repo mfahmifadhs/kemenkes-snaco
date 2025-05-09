@@ -104,7 +104,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-7">
+                    <div class="col-md-6">
                         <div class="input-group">
                             <label class="w-25">Tanggal {{ $data->kategori }}</label>
                             <span class="w-75">: {{ $data->tanggal_usulan }}</span>
@@ -132,14 +132,22 @@
                                 {{ ucwords(strtolower($data->user->pegawai->uker->utama->unit_utama)) }}
                             </span>
                         </div>
+
                         <div class="input-group">
                             <label class="w-25">Keterangan</label>
                             <span class="w-75">: {{ $data->keterangan }}</span>
                         </div>
 
+                        @if ($data->status_persetujuan == 'true' && $data->keterangan_tolak)
+                        <div class="input-group">
+                            <label class="w-25">Catatan</label>
+                            <span class="w-75">: {{ $data->keterangan_tolak }}</span>
+                        </div>
+                        @endif
+
 
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-6">
                         @if ($data->tanggal_ambil)
                         <div class="input-group">
                             <label class="w-25">Tanggal Ambil</label>
@@ -151,7 +159,7 @@
                             <span class="w-75 text-uppercase">: {{ $data->nomor_usulan }}</span>
                         </div>
                         <div class="input-group">
-                            <label class="w-25">Surat</label>
+                            <label class="w-25">Surat Pengajuan</label>
                             <span class="w-75">:
                                 <a href="{{ route('usulan.surat', $data->id_usulan) }}" target="_blank">
                                     <u><i class="fas fa-file-alt"></i> Lihat Surat</u>
@@ -162,6 +170,26 @@
                         <div class="input-group">
                             <label class="w-25">Email</label>
                             <span class="w-75">: {{ $data->user->email }}</span>
+                        </div>
+
+                        @if ($data->nama_penerima)
+                        <div class="input-group">
+                            <label class="w-25">Penerima</label>
+                            <span class="w-75">: {{ $data->nama_penerima }}</span>
+                        </div>
+                        @endif
+
+                        <div class="input-group">
+                            <label class="w-100 text-secondary my-2">Data Pendukung</label>
+                        </div>
+
+                        <div class="input-group">
+                            <label class="w-25">Surat</label>
+                            <span class="w-75">:
+                                <a href="{{ route('usulan.lihat-surat', $data->id_usulan) }}" target="_blank">
+                                    <i class="fas fa-file-pdf"></i> <u>Lihat Surat</u>
+                                </a>
+                            </span>
                         </div>
                     </div>
                     <!-- <div class="col-md-12">
@@ -192,6 +220,7 @@
                                 <th>Barang</th>
                                 <th>Deskripsi</th>
                                 <th style="width: 15%;">Jumlah</th>
+                                <th style="width: 15%;">Stok Uker</th>
                                 <th style="width: 15%;">Stok Gudang</th>
                             </tr>
                         </thead>
@@ -260,6 +289,7 @@
                                 <td class="text-left">{{ $row->snc->kategori->nama_kategori }}</td>
                                 <td>{{ $row->snc->snc_deskripsi }}</td>
                                 <td>{{ $row->jumlah_permintaan }} {{ $row->snc->satuan->satuan }}</td>
+                                <td>{{ $row->snc->stokUker($data->user->pegawai->uker_id).' '.$row->snc->satuan->satuan }}</td>
                                 <td>{{ $row->snc->stok() }} {{ $row->snc->satuan->satuan }}</td>
                             </tr>
                             @endforeach

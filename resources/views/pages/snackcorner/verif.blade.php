@@ -34,6 +34,8 @@
                                         @csrf
                                         <input type="hidden" name="persetujuan" value="true">
                                         <input type="hidden" name="tanggal_ambil" value="true">
+                                        <input type="hidden" name="catatan" id="catatan">
+
                                         <button type="submit" class="btn btn-success border-dark btn-sm mt-2" onclick="confirmTrue(event)">
                                             <i class="fas fa-check-circle"></i> Setuju
                                         </button>
@@ -107,19 +109,14 @@
                                 <label>Detail Naskah</label>
                             </div>
                             <div class="w-50 text-right text-secondary">
-                                #{{ Carbon\Carbon::parse($data->created_at)->format('dmyHis').$data->id_pengajuan }}-{{ $data->id_usulan }}
+                                {{ $data->kode_usulan }}#{{ Carbon\Carbon::parse($data->created_at)->format('dmyHis').$data->id_pengajuan }}-{{ $data->id_usulan }}
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-7">
+                            <div class="col-md-6">
                                 <div class="input-group">
                                     <label class="w-25">Tanggal {{ $data->kategori }}</label>
                                     <span class="w-75">: {{ $data->tanggal_usulan }}</span>
-                                </div>
-
-                                <div class="input-group">
-                                    <label class="w-25">Nomor Naskah</label>
-                                    <span class="w-75 text-uppercase">: {{ $data->nomor }}</span>
                                 </div>
 
                                 <div class="input-group">
@@ -151,9 +148,14 @@
                                 </div>
 
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="input-group">
-                                    <label class="w-25">Surat</label>
+                                    <label class="w-25">Nomor Naskah</label>
+                                    <span class="w-75 text-uppercase">: {{ $data->nomor_usulan }}</span>
+                                </div>
+
+                                <div class="input-group">
+                                    <label class="w-25">Surat Pengajuan</label>
                                     <span class="w-75">:
                                         <a href="{{ route('usulan.surat', $data->id_usulan) }}" target="_blank">
                                             <u><i class="fas fa-file-alt"></i> Lihat Surat</u>
@@ -164,13 +166,26 @@
                                     <label class="w-25">Email</label>
                                     <span class="w-75">: {{ $data->user->email }}</span>
                                 </div>
+                                @if ($data->nama_penerima)
+                                <div class="input-group">
+                                    <label class="w-25">Penerima</label>
+                                    <span class="w-75">: {{ $data->nama_penerima }}</span>
+                                </div>
+                                @endif
+
+                                <div class="input-group">
+                                    <label class="w-100 text-secondary my-2">Data Pendukung</label>
+                                </div>
+
+                                <div class="input-group">
+                                    <label class="w-25">Surat</label>
+                                    <span class="w-75">:
+                                        <a href="{{ route('usulan.lihat-surat', $data->id_usulan) }}" target="_blank">
+                                            <i class="fas fa-file-pdf"></i> <u>Lihat Surat</u>
+                                        </a>
+                                    </span>
+                                </div>
                             </div>
-                            <!-- <div class="col-md-12">
-                            <div class="input-group">
-                                <label class="w-25">Hal</label>
-                                <span class="w-75 text-justify">: {{ $data->keterangan }}</span>
-                            </div>
-                        </div> -->
                         </div>
                     </div>
                     <div class="card-body small">
@@ -183,7 +198,6 @@
                                         <th>Barang</th>
                                         <th>Deskripsi</th>
                                         <th>Jumlah</th>
-                                        <th>Satuan</th>
                                         <th>Stok Uker</th>
                                         <th>Stok Gudang</th>
                                     </tr>
@@ -194,10 +208,9 @@
                                         <td class="text-center">{{ $loop->iteration }}</td>
                                         <td>{{ $row->snc->kategori->nama_kategori }} {{ $row->snc->snc_nama }}</td>
                                         <td>{{ $row->snc->snc_deskripsi }}</td>
-                                        <td class="text-center">{{ $row->jumlah_permintaan }}</td>
-                                        <td class="text-center">{{ $row->snc->satuan->satuan }}</td>
-                                        <td class="text-center">{{ $row->snc->stokUker($data->user->pegawai->uker_id) }}</td>
-                                        <td class="text-center">{{ $row->snc->stok() }}</td>
+                                        <td class="text-center">{{ $row->jumlah_permintaan.' '.$row->snc->satuan->satuan }}</td>
+                                        <td class="text-center">{{ $row->snc->stokUker($data->user->pegawai->uker_id).' '.$row->snc->satuan->satuan }}</td>
+                                        <td class="text-center">{{ $row->snc->stok().' '.$row->snc->satuan->satuan }}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -272,9 +285,13 @@
             html: `
                 <h6>Tanggal Pengambilan</h6>
                 <input type="date" id="tanggal" class="swal2-input ml-0 mt-0 w-100 border border-dark text-center" value="{{ Carbon\Carbon::now()->format('Y-m-d') }}" placeholder="Tanggal Ambil">
+
+                <h6 class="mt-3">Keterangan</h6>
+                <textarea class="form-control border border-dark" rows="5" id="catatanTrue"></textarea>
             `,
             preConfirm: () => {
                 const tanggal = document.getElementById('tanggal').value;
+                const catatan = document.getElementById('catatanTrue').value;
 
                 // Jika belum ada tanggal yang dipilih, set default text
                 if (!tanggal) {
@@ -287,14 +304,16 @@
                 }
 
                 return {
-                    tanggal: tanggal
+                    tanggal: tanggal,
+                    catatan: catatan
                 };
             },
             showCancelButton: true,
             confirmButtonText: 'Ya',
             cancelButtonText: 'Batal',
         }).then((result) => {
-            const selectedDate = result.value.tanggal;
+            const selectedDate    = result.value.tanggal;
+            const selectedCatatan = result.value.catatan;
             if (result.isConfirmed) {
                 Swal.fire({
                     title: 'Proses...',
@@ -307,6 +326,7 @@
                 });
 
                 document.querySelector('[name="tanggal_ambil"]').value = selectedDate;
+                document.querySelector('[name="catatan"]').value = selectedCatatan;
                 form.submit();
             }
         });

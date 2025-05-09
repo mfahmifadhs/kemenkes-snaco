@@ -39,7 +39,7 @@ class KegiatanController extends Controller
         $uker  = $request->uker;
         $absen = $request->absen;
 
-        $data     = Kegiatan::orderBy('id_kegiatan', 'asc')->orderBy('data_pendukung', 'desc');
+        $data     = Kegiatan::orderBy('id_kegiatan', 'desc')->orderBy('data_pendukung', 'desc');
         $no       = 1;
         $response = [];
 
