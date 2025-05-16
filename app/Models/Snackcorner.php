@@ -61,7 +61,7 @@ class Snackcorner extends Model
 
     public function stokKeluar()
     {
-        return $this->hasMany(UsulanSnc::class, 'snc_id')->where('status', 'true');
+        return $this->hasMany(UsulanSnc::class, 'snc_id')->whereNot('status', 'false');
     }
 
     public function stok()
