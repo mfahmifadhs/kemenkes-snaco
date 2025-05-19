@@ -215,6 +215,8 @@
                                     @csrf
                                     <input type="hidden" name="snc_id" value="{{ $row->id_snc }}">
                                     <input type="hidden" name="proses" value="keranjang">
+
+                                    @if ($row->snc_status == 'true' && $row->stok() != 0)
                                     <div class="input-group">
                                         <a type="button" class="min-button" data-id="data-{{ $row->id_snc }}">
                                             <div class="input-group-append">
@@ -234,9 +236,17 @@
                                             </div>
                                         </a>
                                     </div>
-                                    <button class="btn btn-outline-danger btn-block btn-sm add-to-cart-button mt-2 {{ $row->snc_status != 'true' ? 'disabled' : '' }}" data-id="{{ $row->id_snc }}">
+                                    @endif
+
+                                    @if ($row->snc_status == 'true' && $row->stok() != 0)
+                                    <button class="btn btn-outline-danger btn-block btn-sm add-to-cart-button mt-2 {{ $row->snc_status != 'true' || $row->stok() == 0 ? 'disabled' : '' }}" data-id="{{ $row->id_snc }}">
                                         <i class="fas fa-plus"></i> Keranjang
                                     </button>
+                                    @else
+                                    <a href="" class="btn btn-danger btn-block btn-sm add-to-cart-button mt-2 disabled">
+                                        <i class="fas fa-circle-exclamation"></i> Tidak Tersedia
+                                    </a>
+                                    @endif
                                 </form>
                             </div>
                         </div>
