@@ -249,13 +249,11 @@ class SnackcornerController extends Controller
         );
 
         foreach ($data as $row) {
-            if ($row->stok() != 0) {
-                $response[] = array(
-                    "id"     => $row->id_snc,
-                    "text"   => $row->snc_nama . ' ' . $row->snc_deskripsi,
-                    "satuan" => $row->satuan->satuan
-                );
-            }
+            $response[] = array(
+                "id"     => $row->id_snc,
+                "text"   => $row->snc_nama . ' ' . $row->snc_deskripsi,
+                "satuan" => $row->satuan->satuan
+            );
         }
 
         return response()->json($response);
