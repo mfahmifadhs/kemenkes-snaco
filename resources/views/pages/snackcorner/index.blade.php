@@ -238,7 +238,7 @@
                                     </div>
                                     @endif
 
-                                    @if ($row->snc_status == 'true' && $row->stok() != 0)
+                                    @if ($row->snc_status == 'true' && ($row->stok() != 0 && Auth::user()->role_id == 4))
                                     <button class="btn btn-outline-danger btn-block btn-sm add-to-cart-button mt-2 {{ $row->snc_status != 'true' || $row->stok() == 0 ? 'disabled' : '' }}" data-id="{{ $row->id_snc }}">
                                         <i class="fas fa-plus"></i> Keranjang
                                     </button>
