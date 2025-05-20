@@ -239,7 +239,7 @@
                                     @endif
 
                                     @if ($row->snc_status == 'true' && ($row->stok() != 0 || Auth::user()->role_id == 2))
-                                    <button class="btn btn-outline-danger btn-block btn-sm add-to-cart-button mt-2 {{ $row->snc_status != 'true' ? 'disabled' : '' }}" data-id="{{ $row->id_snc }}">
+                                    <button class="btn btn-outline-danger btn-block btn-sm add-to-cart-button mt-2 {{ $row->snc_status != 'true' ? 'disabled' : '' }}" data-id="{{ $row->id_snc }}" data-stok="{{ $row->stok() }}">
                                         <i class="fas fa-plus"></i> Keranjang
                                     </button>
                                     @else
@@ -356,10 +356,11 @@ $usul = Auth::user()->role_id == 1 || Auth::user()->role_id == 2 ? 'Stok Barang 
                                         {{ $row->snc->snc_nama }} {{ $row->snc->snc_deskripsi }}
                                     </td>
                                     <td>
+                                        @if ($row->snc->stok() != 0)
                                         <div class="row">
                                             <div class="col-md-12 col-12">
                                                 <div class="input-group-text rounded-left" style="height: 31px;">
-                                                    <a type="button" class="qty-button-modal col-12" data-id="{{ $row->id_keranjang }}" href="{{ route('snaco.keranjang.update', ['aksi' => 'plus', 'id' => $row->id_keranjang]) }}">
+                                                    <a type="button" class="qty-button-modal col-12" data-id="{{ $row->id_keranjang }}" data-stok="{{ $row->snc->stok() }}" href="{{ route('snaco.keranjang.update', ['aksi' => 'plus', 'id' => $row->id_keranjang]) }}">
                                                         <i class="fas fa-plus-circle" aria-hidden="true"></i>
                                                     </a>
                                                 </div>
@@ -375,7 +376,11 @@ $usul = Auth::user()->role_id == 1 || Auth::user()->role_id == 2 ? 'Stok Barang 
                                                 </div>
                                             </div>
                                         </div>
+                                        @else
+                                        <span class="badge badge-danger p-2 btn-block">Tidak tersedia</span>
+                                        @endif
                                     </td>
+
                                     <td><label>{{ $row->snc->satuan->satuan }}</label></td>
                                     <td class="text-left">
                                         <input type="text" id="keteranganInput-{{ $row->id_keranjang }}" name="keterangan_permintaan[]" class="form-control form-control-sm" placeholder="Keterangan">
@@ -426,14 +431,13 @@ $usul = Auth::user()->role_id == 1 || Auth::user()->role_id == 2 ? 'Stok Barang 
     $(document).ready(function() {
         $(".add-to-cart-button").click(function(event) {
             event.preventDefault(); // Mencegah tindakan default dari tombol
+            const role = '{{ Auth::user()->role_id }}'
 
             const formId = $(this).data("id");
             const form = $("#form-" + formId);
 
             const qty = parseFloat(form.find('input[name="qty"]').val().replace(/\./g, '')) || 0
-            const maxQty = form.find('input[name="qty"]').attr("max")
-
-            console.log('maks ' + qty)
+            const maxQty = $(this).data("stok")
 
             if (qty == 0) {
                 Swal.fire({
@@ -444,15 +448,14 @@ $usul = Auth::user()->role_id == 1 || Auth::user()->role_id == 2 ? 'Stok Barang 
                     timer: 1000
                 });
             } else {
-                if (qty >= maxQty) {
+                if (qty >= maxQty && role == 4) {
                     Swal.fire({
-                        title: 'Melebihi batas permintaan',
-                        text: '',
+                        title: 'Stok tidak tersedia',
+                        text: 'Permintaan anda melebihi ketersediaan stok di gudang',
                         icon: 'error',
                         showConfirmButton: false,
                         timer: 1000
                     });
-                    location.reload();
                 } else {
                     $.ajax({
                         url: form.attr("action"),
@@ -527,15 +530,29 @@ $usul = Auth::user()->role_id == 1 || Auth::user()->role_id == 2 ? 'Stok Barang 
             const dataId = $(this).data("id");
             const link = $(this).attr('href');
             const inputElement = $("#" + dataId);
+            const stok = $(this).data("stok")
 
-            $.ajax({
-                url: link,
-                type: "GET",
-                success: function(response) {
-                    const updatedKuantitas = response.updatedKuantitas.kuantitas;
-                    inputElement.val(updatedKuantitas);
-                }
-            })
+            console.log("val" + inputElement.val() + " stok " + stok)
+
+            if (inputElement.val() >= stok) {
+                Swal.fire({
+                    title: 'Stok tidak tersedia',
+                    text: 'Permintaan anda melebihi ketersediaan stok di gudang',
+                    icon: 'error',
+                    showConfirmButton: false,
+                    timer: 1000
+                });
+            } else {
+                $.ajax({
+                    url: link,
+                    type: "GET",
+                    success: function(response) {
+                        const updatedKuantitas = response.updatedKuantitas.kuantitas;
+                        inputElement.val(updatedKuantitas);
+                    }
+                })
+            }
+
         })
 
         // format angka
@@ -656,7 +673,6 @@ $usul = Auth::user()->role_id == 1 || Auth::user()->role_id == 2 ? 'Stok Barang 
 
         for (i = 0; i < cards.length; i++) {
             description = cards[i].querySelector(".hide-text-p2").innerText.toLowerCase();
-            console.log(description)
 
             if (description.indexOf(filter) > -1) {
                 cards[i].style.display = "";
@@ -769,7 +785,6 @@ $usul = Auth::user()->role_id == 1 || Auth::user()->role_id == 2 ? 'Stok Barang 
         const form = document.getElementById('form');
         const requiredInputs = form.querySelectorAll('input[required]:not(:disabled), select[required]:not(:disabled), textarea[required]:not(:disabled)');
         const basket = '{{ Auth::user()->keranjang->count() }}'
-        console.log(basket)
 
         let allInputsValid = true;
 

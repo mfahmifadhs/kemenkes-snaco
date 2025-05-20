@@ -268,20 +268,29 @@ class SnackcornerController extends Controller
         $snc    = UsulanSnc::where('snc_id', $request->id_snc)->where('usulan_id', $request->usulan_id)->first();
         $usulan = Usulan::where('id_usulan', $request->usulan_id)->first();
 
+        if ($snc && $request->jumlah >= $snc->snc->stok()) {
+            return redirect()->back()->with('failed', 'Stok tidak tersedia');
+        }
+
         if ($snc) {
             $total = $snc->jumlah_permintaan + $request->jumlah;
             UsulanSnc::where('id_usulan_snc', $snc->id_usulan_snc)->update([
                 'jumlah_permintaan' => $total,
-                'status'            => $snc->usulan->status_persetujuan == 'true' ? 'true' : 'false'
+                'status'            => 'true'
             ]);
         } else {
+            $snc = Snackcorner::where('id_snc', $request->id_snc)->first();
+            if ($snc && $request->jumlah >= $snc->stok()) {
+                return redirect()->back()->with('failed', 'Stok tidak tersedia');
+            }
+
             $id_usulan_snc = UsulanSnc::withTrashed()->count() + 1;
             $tambah = new UsulanSnc();
             $tambah->id_usulan_snc      = $id_usulan_snc;
             $tambah->usulan_id          = $request->usulan_id;
             $tambah->snc_id             = $request->id_snc;
             $tambah->jumlah_permintaan  = $request->jumlah;
-            $tambah->status             = $usulan->status_persetujuan == 'true' ? 'true' : 'false';
+            $tambah->status             = 'true';
             $tambah->created_at         = Carbon::now();
             $tambah->save();
         }
@@ -292,6 +301,11 @@ class SnackcornerController extends Controller
     public function updateItem(Request $request)
     {
         $snc = UsulanSnc::where('snc_id', $request->id_snc)->where('usulan_id', $request->usulan_id)->first();
+
+        if ($snc && $snc->jumlah_permintaan >= $snc->snc->stok()) {
+            return redirect()->back()->with('failed', 'Stok tidak tersedia');
+        }
+
         if ($snc) {
             $total = $snc->jumlah_permintaan + $request->jumlah;
             UsulanSnc::where('id_usulan_snc', $snc->id_usulan_snc)->update([
@@ -448,6 +462,10 @@ class SnackcornerController extends Controller
     public function storeBucket(Request $request)
     {
         $bucket = SnackcornerKeranjang::where('user_id', Auth::user()->id)->where('snc_id', $request->snc_id)->first();
+
+        if ($bucket && ($request->qty + $bucket->kuantitas) >= $bucket->snc->stok()) {
+            return response()->json('Stok tidak tersedia', 422);
+        }
 
         if ($bucket) {
             SnackcornerKeranjang::where('id_keranjang', $bucket->id_keranjang)->update([

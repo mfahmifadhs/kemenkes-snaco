@@ -69,6 +69,19 @@ class UsulanController extends Controller
 
     public function store(Request $request)
     {
+        $cekStok = 0;
+        foreach ($request->id_snc as $snc_id) {
+            $snc = Snackcorner::where('id_snc', $snc_id)->first();
+            if ($snc->stok() == 0) {
+                $cekStok++;
+            }
+        }
+
+        if ($cekStok != 0) {
+            return redirect()->route('snaco.dashboard')->with('failed', 'Periksa kembali, ada barang yang tidak tersedia');
+        }
+
+
         if ($request->form_id == 601 && !$request->id_snc) {
             return redirect()->route('snaco.dashboard')->with('failed', 'Anda belum memilih barang');
         }
@@ -109,6 +122,7 @@ class UsulanController extends Controller
                 $detail->snc_id                 = $snc_id;
                 $detail->jumlah_permintaan      = $request->jumlah[$i];
                 $detail->keterangan_permintaan  = $request->keterangan_permintaan[$i];
+                $detail->status                 = 'true';
                 $detail->created_at             = Carbon::now();
                 $detail->save();
 
@@ -248,6 +262,12 @@ class UsulanController extends Controller
                 'otp_3'              => $otp3,
                 'tanggal_usulan'     => Carbon::parse($request->tanggal_ambil . ' ' . now()->toTimeString()) ?? Carbon::now()
             ]);
+
+            if ($request->persetujuan == 'false') {
+                UsulanSnc::where('usulan_id', $id)->update([
+                    'status' => 'false'
+                ]);
+            }
             return redirect()->route('snaco.detail', $id)->with('success', 'Berhasil Melakukan Verifikasi');
         }
     }
