@@ -377,7 +377,7 @@
         });
 
         if (allInputsValid) {
-            if (sisa <= 0) {
+            if (sisa < 0) {
                 Swal.fire({
                     title: 'Error',
                     text: 'Stok Tidak Tersedia.',

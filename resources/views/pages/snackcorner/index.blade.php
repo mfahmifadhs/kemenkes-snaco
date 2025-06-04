@@ -356,7 +356,7 @@ $usul = Auth::user()->role_id == 1 || Auth::user()->role_id == 2 ? 'Stok Barang 
                                         {{ $row->snc->snc_nama }} {{ $row->snc->snc_deskripsi }}
                                     </td>
                                     <td>
-                                        @if ($row->snc->stok() != 0)
+                                        @if ($row->snc->stok() != 0 || Auth::user()->role_id != 4)
                                         <div class="row">
                                             <div class="col-md-12 col-12">
                                                 <div class="input-group-text rounded-left" style="height: 31px;">
