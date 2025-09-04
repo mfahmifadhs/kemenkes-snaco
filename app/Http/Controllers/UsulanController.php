@@ -239,7 +239,7 @@ class UsulanController extends Controller
                 'otp'   => $otp3
             ];
 
-            Mail::to($data->user->email)->send(new emailOTP($dataMail));
+            // Mail::to($data->user->email)->send(new emailOTP($dataMail));
 
             $klasifikasi = $data->form->klasifikasi;
             $kodeSurat   = $data->user->pegawai->uker->kode_surat;
